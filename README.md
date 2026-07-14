@@ -14,6 +14,6 @@
 <dependency>
     <groupId>io.github.hiwepy</groupId>
     <artifactId>validation-api-extension</artifactId>
-    <version>1.0.x.20260630-SNAPSHOT</version>
+    <version>2.0.x.20260630-SNAPSHOT</version>
 </dependency>
 ```
