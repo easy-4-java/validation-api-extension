@@ -4,13 +4,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>io.github.hiwepy</groupId>
+    <groupId>io.github.easy4j</groupId>
     <artifactId>validation-api-extension</artifactId>
     <version>1.0.x.20260630-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>${project.groupId}:${project.artifactId}</name>
     <description>Jakarta Validation extensions and common constraint validators</description>
-    <url>https://github.com/hiwepy/${project.artifactId}</url>
+    <url>https://github.com/easy-4-java/${project.artifactId}</url>
 
     <!-- Project license information used by generated metadata and repository publishing. -->
     <licenses>
@@ -23,9 +23,9 @@
 
     <!-- Source repository coordinates embedded in published POM files. -->
     <scm>
-        <connection>scm:git:https://github.com/hiwepy/${project.artifactId}.git</connection>
-        <developerConnection>scm:git:https://github.com/hiwepy/${project.artifactId}.git</developerConnection>
-        <url>https://github.com/hiwepy/${project.artifactId}</url>
+        <connection>scm:git:https://github.com/easy-4-java/${project.artifactId}.git</connection>
+        <developerConnection>scm:git:https://github.com/easy-4-java/${project.artifactId}.git</developerConnection>
+        <url>https://github.com/easy-4-java/${project.artifactId}</url>
         <tag>HEAD</tag>
     </scm>
 
