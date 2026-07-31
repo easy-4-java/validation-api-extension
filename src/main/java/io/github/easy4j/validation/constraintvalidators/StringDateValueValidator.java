@@ -1,6 +1,6 @@
-package io.github.hiwepy.validation.constraintvalidators;
+package io.github.easy4j.validation.constraintvalidators;
 
-import io.github.hiwepy.validation.constraints.StringDateValue;
+import io.github.easy4j.validation.constraints.StringDateValue;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import lombok.extern.slf4j.Slf4j;

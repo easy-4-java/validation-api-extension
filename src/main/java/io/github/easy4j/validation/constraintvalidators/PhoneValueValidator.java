@@ -1,10 +1,10 @@
-package io.github.hiwepy.validation.constraintvalidators;
+package io.github.easy4j.validation.constraintvalidators;
 
 
 import com.google.i18n.phonenumbers.NumberParseException;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
-import io.github.hiwepy.validation.constraints.PhoneNumber;
+import io.github.easy4j.validation.constraints.PhoneNumber;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
