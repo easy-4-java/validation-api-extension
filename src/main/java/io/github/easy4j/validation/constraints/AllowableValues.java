@@ -1,7 +1,7 @@
-package io.github.hiwepy.validation.constraints;
+package io.github.easy4j.validation.constraints;
 
 
-import io.github.hiwepy.validation.constraintvalidators.AllowedValuesValidator;
+import io.github.easy4j.validation.constraintvalidators.AllowedValuesValidator;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 
