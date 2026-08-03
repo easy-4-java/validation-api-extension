@@ -1,10 +1,11 @@
 package io.github.easy4j.validation.internal.constraintvalidators;
 
+import cn.hutool.core.io.unit.DataSize;
+import cn.hutool.core.io.unit.DataUnit;
 import io.github.easy4j.validation.constraints.FileNotEmpty;
 import io.github.easy4j.validation.file.UploadFile;
 import io.github.easy4j.validation.file.UploadFileAdapters;
 import io.github.easy4j.validation.provider.FileContentCheckStrategy;
-import io.github.easy4j.validation.utils.FileSizeUtil;
 import io.github.easy4j.validation.utils.MimetypeUtil;
 import io.github.easy4j.validation.utils.TikaUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -35,7 +36,7 @@ public class FilesNotEmptyValidator implements ConstraintValidator<FileNotEmpty,
 
     private Set<String> extensionSet = new HashSet<String>();
     private Set<String> mimeTypeSet = new HashSet<String>();
-    private Long maxSize;
+    private DataSize maxSize;
     private boolean required;
     private boolean strict;
 
@@ -53,7 +54,7 @@ public class FilesNotEmptyValidator implements ConstraintValidator<FileNotEmpty,
         this.required = annotation.required();
         this.strict = annotation.strict();
         this.maxSize = StringUtils.isNotBlank(annotation.maxSize())
-                ? FileSizeUtil.parse(annotation.maxSize()) : null;
+                ? DataSize.parse(annotation.maxSize(), DataUnit.BYTES) : null;
     }
 
     @Override
@@ -74,7 +75,8 @@ public class FilesNotEmptyValidator implements ConstraintValidator<FileNotEmpty,
                 return false;
             }
             // 3.1、验证文件大小是否满足要求
-            if (Objects.nonNull(maxSize) && maxSize <= uploadFile.getSize()) {
+            if (Objects.nonNull(maxSize)
+                    && maxSize.compareTo(DataSize.of(uploadFile.getSize(), DataUnit.BYTES)) <= 0) {
                 return Boolean.FALSE;
             }
             try {
