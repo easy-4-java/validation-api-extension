@@ -3,10 +3,9 @@ package io.github.easy4j.validation.constraintvalidators;
 import io.github.easy4j.validation.constraints.StringDateValue;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
-import java.text.ParseException;
+import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 
 /**
@@ -15,7 +14,6 @@ import java.text.SimpleDateFormat;
  * @author <a href="https://github.com/partme-ai">PartMe.AI</a>
  * @since 2021-03-08
  */
-@Slf4j
 public class StringDateValueValidator implements ConstraintValidator<StringDateValue, String> {
 
     private StringDateValue dateValue;
@@ -30,24 +28,19 @@ public class StringDateValueValidator implements ConstraintValidator<StringDateV
         if (StringUtils.isBlank(value)) {
             return true;
         }
-        boolean res = false;
-        String msg = "";
-        String pattern = dateValue.pattern();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-        // 设置lenient为false.
-        // 否则SimpleDateFormat会比较宽松地验证日期，比如2007/02/29会被接受，并转换成2007/03/01
-        simpleDateFormat.setLenient(false);
+        boolean valid = false;
         try {
-            simpleDateFormat.parse(value);
-            res = true;
-        } catch (ParseException e) {
-            log.error("字符串日期解析出错", e);
-            msg = dateValue.message() + "字符串日期格式出错";
+            SimpleDateFormat dateFormat = new SimpleDateFormat(dateValue.pattern());
+            dateFormat.setLenient(false);
+            ParsePosition position = new ParsePosition(0);
+            valid = dateFormat.parse(value, position) != null && position.getIndex() == value.length();
+        } catch (IllegalArgumentException exception) {
+            valid = false;
         }
-        if (!res) { // res为false表明有错误提示输出
+        if (!valid) {
             constraintValidatorContext.disableDefaultConstraintViolation();
-            constraintValidatorContext.buildConstraintViolationWithTemplate(msg).addConstraintViolation();
+            constraintValidatorContext.buildConstraintViolationWithTemplate(dateValue.message()).addConstraintViolation();
         }
-        return res;
+        return valid;
     }
 }
