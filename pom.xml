@@ -69,6 +69,7 @@
         <lombok.version>1.18.46</lombok.version>
         <jakarta-regexp.version>1.4</jakarta-regexp.version>
         <oro.version>2.0.8</oro.version>
+        <tika.version>2.9.4</tika.version>
 
         <!-- Test dependencies. -->
         <junit.version>5.12.2</junit.version>
@@ -125,6 +126,18 @@
                 <groupId>oro</groupId>
                 <artifactId>oro</artifactId>
                 <version>${oro.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.tika</groupId>
+                <artifactId>tika-core</artifactId>
+                <version>${tika.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.tika</groupId>
+                <artifactId>tika-parsers-standard-package</artifactId>
+                <version>${tika.version}</version>
             </dependency>
 
             <!-- SLF4J logging facade. -->
@@ -190,6 +203,19 @@
         <dependency>
             <groupId>jakarta-regexp</groupId>
             <artifactId>jakarta-regexp</artifactId>
+        </dependency>
+
+        <!-- Detect real file types from content signatures instead of trusting the client filename. -->
+        <dependency>
+            <groupId>org.apache.tika</groupId>
+            <artifactId>tika-core</artifactId>
+        </dependency>
+
+        <!-- Applications opt in to the full parser set when container-aware detection is required. -->
+        <dependency>
+            <groupId>org.apache.tika</groupId>
+            <artifactId>tika-parsers-standard-package</artifactId>
+            <scope>provided</scope>
         </dependency>
 
         <!-- Logging API; applications provide the concrete implementation. -->
