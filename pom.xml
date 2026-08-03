@@ -68,9 +68,13 @@
         <commons-lang3.version>3.20.0</commons-lang3.version>
         <slf4j.version>2.0.18</slf4j.version>
         <lombok.version>1.18.46</lombok.version>
+        <jakarta-regexp.version>1.4</jakarta-regexp.version>
+        <oro.version>2.0.8</oro.version>
 
         <!-- Test dependencies. -->
         <junit.version>5.12.2</junit.version>
+        <hibernate-validator.version>8.0.2.Final</hibernate-validator.version>
+        <jakarta-el.version>4.0.2</jakarta-el.version>
 
         <!-- Maven runtime and build plugins. -->
         <maven.version>3.6.3</maven.version>
@@ -113,6 +117,18 @@
                 <version>${commons-lang3.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>jakarta-regexp</groupId>
+                <artifactId>jakarta-regexp</artifactId>
+                <version>${jakarta-regexp.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>oro</groupId>
+                <artifactId>oro</artifactId>
+                <version>${oro.version}</version>
+            </dependency>
+
             <!-- SLF4J logging facade. -->
             <dependency>
                 <groupId>org.slf4j</groupId>
@@ -132,6 +148,18 @@
                 <groupId>org.junit.jupiter</groupId>
                 <artifactId>junit-jupiter</artifactId>
                 <version>${junit.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.hibernate.validator</groupId>
+                <artifactId>hibernate-validator</artifactId>
+                <version>${hibernate-validator.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.glassfish</groupId>
+                <artifactId>jakarta.el</artifactId>
+                <version>${jakarta-el.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -155,6 +183,17 @@
             <artifactId>commons-lang3</artifactId>
         </dependency>
 
+        <!-- Apache ORO compatibility retained for the historical regexp annotations. -->
+        <dependency>
+            <groupId>oro</groupId>
+            <artifactId>oro</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>jakarta-regexp</groupId>
+            <artifactId>jakarta-regexp</artifactId>
+        </dependency>
+
         <!-- Logging API; applications provide the concrete implementation. -->
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -172,6 +211,18 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.glassfish</groupId>
+            <artifactId>jakarta.el</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>
