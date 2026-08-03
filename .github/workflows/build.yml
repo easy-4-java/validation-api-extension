@@ -34,7 +34,7 @@ jobs:
       contents: read
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/dependency-review-action@v4
+      - uses: actions/dependency-review-action@v5
 
   api-compatibility:
     if: github.event_name == 'pull_request'
