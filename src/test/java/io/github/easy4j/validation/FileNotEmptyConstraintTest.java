@@ -33,6 +33,17 @@ class FileNotEmptyConstraintTest {
         assertEquals(1, validator.validate(new MultipleUpload(new UploadFile[0])).size());
     }
 
+    @Test
+    void shouldPreserveProductionValidationSemantics() {
+        UploadFile detectedPdfWithDifferentSuffix = file("report.exe", "%PDF-1.7\n%%EOF");
+        UploadFile fourBytes = file("data.bin", "1234");
+        UploadFile threeBytes = file("data.bin", "123");
+
+        assertTrue(validator.validate(new SingleUpload(detectedPdfWithDifferentSuffix)).isEmpty());
+        assertEquals(1, validator.validate(new SizeLimitedUpload(fourBytes)).size());
+        assertTrue(validator.validate(new SizeLimitedUpload(threeBytes)).isEmpty());
+    }
+
     private UploadFile file(String name, String content) {
         byte[] bytes = content.getBytes(StandardCharsets.US_ASCII);
         return new DefaultUploadFile("file", name, "application/pdf", bytes.length,
@@ -52,6 +63,14 @@ class FileNotEmptyConstraintTest {
         private final UploadFile[] files;
         private MultipleUpload(UploadFile[] files) {
             this.files = files;
+        }
+    }
+
+    private static final class SizeLimitedUpload {
+        @FileNotEmpty(maxSize = "4B")
+        private final UploadFile file;
+        private SizeLimitedUpload(UploadFile file) {
+            this.file = file;
         }
     }
 }

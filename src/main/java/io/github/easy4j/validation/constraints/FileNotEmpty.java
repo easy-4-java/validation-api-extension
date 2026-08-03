@@ -1,7 +1,7 @@
 package io.github.easy4j.validation.constraints;
 
-import io.github.easy4j.validation.constraintvalidators.FileNotEmptyValidator;
-import io.github.easy4j.validation.constraintvalidators.FilesNotEmptyValidator;
+import io.github.easy4j.validation.internal.constraintvalidators.FileNotEmptyValidator;
+import io.github.easy4j.validation.internal.constraintvalidators.FilesNotEmptyValidator;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
