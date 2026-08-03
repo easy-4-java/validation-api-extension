@@ -9,7 +9,7 @@
     <version>2.0.x.20260630-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>${project.groupId}:${project.artifactId}</name>
-    <description>Jakarta Validation extensions and common constraint validators</description>
+    <description>Javax Validation extensions and common constraint validators</description>
     <url>https://github.com/easy-4-java/${project.artifactId}</url>
 
     <!-- Project license information used by generated metadata and repository publishing. -->
@@ -63,14 +63,18 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
         <!-- Runtime dependencies. -->
-        <jakarta-validation.version>3.1.1</jakarta-validation.version>
+        <javax-validation.version>2.0.1.Final</javax-validation.version>
         <libphonenumber.version>9.0.34</libphonenumber.version>
         <commons-lang3.version>3.20.0</commons-lang3.version>
         <slf4j.version>2.0.18</slf4j.version>
         <lombok.version>1.18.46</lombok.version>
+        <jakarta-regexp.version>1.4</jakarta-regexp.version>
+        <oro.version>2.0.8</oro.version>
 
         <!-- Test dependencies. -->
         <junit.version>5.12.2</junit.version>
+        <hibernate-validator.version>6.2.5.Final</hibernate-validator.version>
+        <javax-el.version>3.0.1-b12</javax-el.version>
 
         <!-- Maven runtime and build plugins. -->
         <maven.version>3.6.3</maven.version>
@@ -92,11 +96,11 @@
     <!-- Centralize versions so the dependency list only describes usage and scope. -->
     <dependencyManagement>
         <dependencies>
-            <!-- Jakarta Bean Validation API. -->
+            <!-- Javax Bean Validation API. -->
             <dependency>
-                <groupId>jakarta.validation</groupId>
-                <artifactId>jakarta.validation-api</artifactId>
-                <version>${jakarta-validation.version}</version>
+                <groupId>javax.validation</groupId>
+                <artifactId>validation-api</artifactId>
+                <version>${javax-validation.version}</version>
             </dependency>
 
             <!-- International phone number parsing and validation. -->
@@ -111,6 +115,18 @@
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-lang3</artifactId>
                 <version>${commons-lang3.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>jakarta-regexp</groupId>
+                <artifactId>jakarta-regexp</artifactId>
+                <version>${jakarta-regexp.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>oro</groupId>
+                <artifactId>oro</artifactId>
+                <version>${oro.version}</version>
             </dependency>
 
             <!-- SLF4J logging facade. -->
@@ -133,14 +149,26 @@
                 <artifactId>junit-jupiter</artifactId>
                 <version>${junit.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>org.hibernate.validator</groupId>
+                <artifactId>hibernate-validator</artifactId>
+                <version>${hibernate-validator.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.glassfish</groupId>
+                <artifactId>javax.el</artifactId>
+                <version>${javax-el.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
     <dependencies>
-        <!-- Jakarta Bean Validation API. -->
+        <!-- Javax Bean Validation API. -->
         <dependency>
-            <groupId>jakarta.validation</groupId>
-            <artifactId>jakarta.validation-api</artifactId>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
         </dependency>
 
         <!-- International phone number validation support. -->
@@ -153,6 +181,17 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
+        </dependency>
+
+        <!-- Apache ORO compatibility retained for the historical regexp annotations. -->
+        <dependency>
+            <groupId>oro</groupId>
+            <artifactId>oro</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>jakarta-regexp</groupId>
+            <artifactId>jakarta-regexp</artifactId>
         </dependency>
 
         <!-- Logging API; applications provide the concrete implementation. -->
@@ -172,6 +211,18 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.glassfish</groupId>
+            <artifactId>javax.el</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>

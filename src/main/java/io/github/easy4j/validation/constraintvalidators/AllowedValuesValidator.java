@@ -1,8 +1,8 @@
 package io.github.easy4j.validation.constraintvalidators;
 
 import io.github.easy4j.validation.constraints.AllowableValues;
-import jakarta.validation.ConstraintValidator;
-import jakarta.validation.ConstraintValidatorContext;
+import javax.validation.ConstraintValidator;
+import javax.validation.ConstraintValidatorContext;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;

@@ -1,8 +1,8 @@
 package io.github.easy4j.validation.constraintvalidators;
 
 import io.github.easy4j.validation.constraints.StringDateValue;
-import jakarta.validation.ConstraintValidator;
-import jakarta.validation.ConstraintValidatorContext;
+import javax.validation.ConstraintValidator;
+import javax.validation.ConstraintValidatorContext;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
