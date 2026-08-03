@@ -1,30 +1,24 @@
 package io.github.easy4j.validation.provider;
 
-import io.github.easy4j.validation.file.DetectedFileType;
-import io.github.easy4j.validation.file.ValidatableFile;
-
-import java.io.IOException;
+import io.github.easy4j.validation.file.UploadFile;
 
 /**
- * 文件类型校验通过后执行的可扩展内容安全检查。
+ * 文件基础格式校验通过后执行的扩展内容检查。
  */
 public interface FileContentCheckProvider {
 
     /**
-     * 判断是否支持当前检测类型。
+     * 检查文件内容是否合法。
      *
-     * @param detectedFileType Tika 检测类型
-     * @return 是否支持
+     * @param uploadFile 上传文件
+     * @return 是否通过
      */
-    boolean supports(DetectedFileType detectedFileType);
+    Boolean check(UploadFile uploadFile);
 
     /**
-     * 检查文件内容，例如病毒、宏或业务敏感内容。
+     * 支持的文件扩展名，例如 txt、doc、pdf；星号通配类型表示兜底。
      *
-     * @param file 待检查文件
-     * @param detectedFileType Tika 检测类型
-     * @return 是否通过
-     * @throws IOException 内容无法读取时抛出
+     * @return 支持类型
      */
-    boolean check(ValidatableFile file, DetectedFileType detectedFileType) throws IOException;
+    String support();
 }
