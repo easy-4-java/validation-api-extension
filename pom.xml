@@ -76,7 +76,7 @@
 
         <!-- Test dependencies. -->
         <junit.version>5.12.2</junit.version>
-        <hibernate-validator.version>6.2.5.Final</hibernate-validator.version>
+        <hibernate-validator.version>9.1.3.Final</hibernate-validator.version>
         <javax-el.version>3.0.1-b12</javax-el.version>
 
         <!-- Maven runtime and build plugins. -->
