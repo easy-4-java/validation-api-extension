@@ -45,6 +45,22 @@ public final class TikaUtil {
         }
     }
 
+    /**
+     * 仅根据文件内容检测 MIME 类型，不信任客户端提交的文件名。
+     *
+     * @param uploadFile 上传文件
+     * @return 解析到的 MIME 类型
+     * @throws IOException 读取文件失败时抛出
+     */
+    public static MimeType detectContentMimeType(UploadFile uploadFile) throws IOException {
+        if (Objects.isNull(uploadFile) || uploadFile.isEmpty()) {
+            return null;
+        }
+        try (InputStream inputStream = uploadFile.getInputStream()) {
+            return toMimeType(TIKA.detect(inputStream));
+        }
+    }
+
     private static MimeType toMimeType(String mimeType) throws IOException {
         try {
             return DEFAULT_MIME_TYPES.forName(mimeType);

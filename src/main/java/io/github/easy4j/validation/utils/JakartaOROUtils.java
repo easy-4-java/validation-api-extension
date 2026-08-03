@@ -196,11 +196,7 @@ public class JakartaOROUtils {
 				return ret;
 			}
 			ret = compiler.compile(regexp,mask);
-			Pattern existing = COMPLIED_PATTERN.putIfAbsent(cacheKey, ret);
-			if (existing != null) {
-				ret = existing;
-			}
-			return ret;
+			return RegexpPatternCache.cache(COMPLIED_PATTERN, cacheKey, ret);
 		}
 		return null;
 	}
