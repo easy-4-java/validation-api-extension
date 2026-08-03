@@ -19,7 +19,10 @@
 | libphonenumber | 9.0.34 | 9.0.35 | 9.0.36 |
 | Apache Commons IO | 2.18.0 | 2.20.0 | 2.22.0 |
 | Hutool Core | 5.8.45 | 5.8.46 | 5.8.47 |
-| Hibernate Validator | 6.1.7.Final | 6.2.5.Final | 9.1.3.Final |
+| Hibernate Validator | 6.2.4.Final | 6.2.5.Final | 9.1.3.Final |
+
+`1.0.x` 固定使用 JDK 8 可加载的最高 Apache Tika 版本 `2.9.4`（class major version 52）。
+Tika `3.2.2+` 虽修复了已知 XXE 漏洞，但其 class major version 为 55，要求 JDK 11，不能进入 JDK 8 版本线。
 
 ```xml
 <dependency>
