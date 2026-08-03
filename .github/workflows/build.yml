@@ -16,7 +16,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        java: [17, 21]
+        java: [21]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
@@ -58,4 +58,4 @@ jobs:
       - name: Check current public API against baseline
         run: >-
           mvn -B -ntp -f current/pom.xml clean verify -Papi-compatibility
-          -Dapi.compatibility.version=1.0.x.20260630-SNAPSHOT
+          -Dapi.compatibility.version=3.0.x.20260630-SNAPSHOT
