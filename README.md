@@ -8,7 +8,7 @@
 | --- | --- | --- | --- |
 | `feature/1.0.x` | 8 | Javax Validation 2.0.1 | `1.0.x.20260630-SNAPSHOT` |
 | `feature/2.0.x` | 17 | Javax Validation 2.0.1 | `2.0.x.20260630-SNAPSHOT` |
-| `feature/3.0.x` | 21 | Jakarta Validation 3.1.1 | `3.0.x.20260630-SNAPSHOT` |
+| `feature/3.0.x` | 17 | Jakarta Validation 3.1.1 | `3.0.x.20260630-SNAPSHOT` |
 
 ```xml
 <dependency>
@@ -32,20 +32,24 @@
 ```
 
 ```java
-FileValidationPolicy policy = FileValidationPolicy.builder()
-        .allowedExtensions("doc", "docx", "xls", "xlsx", "pdf")
-        .allowedMimeTypes(
-                "application/msword",
-                "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-                "application/vnd.ms-excel",
-                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                "application/pdf")
-        .maxSizeBytes(10L * 1024L * 1024L)
-        .build();
+public class UploadCommand {
 
-ValidatableFile file = new DefaultValidatableFile(
-        fileName, clientContentType, size, inputStreamSource);
-FileValidationResult result = new FileValidationService().validate(file, policy);
+    @FileNotEmpty(
+            extensions = {"doc", "docx", "xls", "xlsx", "pdf"},
+            mimeTypes = {
+                    "application/msword",
+                    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                    "application/vnd.ms-excel",
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                    "application/pdf"
+            },
+            maxSize = "10MB",
+            strict = true)
+    private UploadFile file;
+}
 ```
 
-Spring MVC、Javalin 和 Quarkus 只负责把各自的上传对象适配成 `ValidatableFile`；公共模块不依赖具体 Web 框架。
+公共模块保留生产使用的 `FileNotEmptyValidator`、`FilesNotEmptyValidator`、
+`FileContentCheckStrategy`、`FileContentCheckProvider`、`TikaUtil` 和 `MimetypeUtil`。
+Spring MVC、Javalin、Quarkus 仅通过 Java SPI 提供 `UploadFileAdapter`，把各自上传对象转换成
+方法语义与 Spring `MultipartFile` 一致的 `UploadFile`，公共模块不依赖具体 Web 框架。

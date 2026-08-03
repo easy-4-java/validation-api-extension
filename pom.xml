@@ -63,10 +63,13 @@
 
         <!-- Runtime dependencies. -->
         <javax-validation.version>2.0.1.Final</javax-validation.version>
+        <javax-inject.version>1</javax-inject.version>
+        <javax-activation.version>1.2.0</javax-activation.version>
         <libphonenumber.version>9.0.34</libphonenumber.version>
         <commons-lang3.version>3.20.0</commons-lang3.version>
         <slf4j.version>2.0.18</slf4j.version>
         <lombok.version>1.18.46</lombok.version>
+        <hutool.version>5.8.46</hutool.version>
         <jakarta-regexp.version>1.4</jakarta-regexp.version>
         <oro.version>2.0.8</oro.version>
         <tika.version>2.9.4</tika.version>
@@ -102,6 +105,16 @@
                 <artifactId>validation-api</artifactId>
                 <version>${javax-validation.version}</version>
             </dependency>
+            <dependency>
+                <groupId>javax.inject</groupId>
+                <artifactId>javax.inject</artifactId>
+                <version>${javax-inject.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>javax.activation</groupId>
+                <artifactId>javax.activation-api</artifactId>
+                <version>${javax-activation.version}</version>
+            </dependency>
 
             <!-- International phone number parsing and validation. -->
             <dependency>
@@ -115,7 +128,12 @@
                 <artifactId>commons-lang3</artifactId>
                 <version>${commons-lang3.version}</version>
             </dependency>
-
+            <!-- Source: https://mvnrepository.com/artifact/cn.hutool/hutool-core -->
+            <dependency>
+                <groupId>cn.hutool</groupId>
+                <artifactId>hutool-core</artifactId>
+                <version>${hutool.version}</version>
+            </dependency>
             <dependency>
                 <groupId>jakarta-regexp</groupId>
                 <artifactId>jakarta-regexp</artifactId>
@@ -181,6 +199,14 @@
             <groupId>javax.validation</groupId>
             <artifactId>validation-api</artifactId>
         </dependency>
+        <dependency>
+            <groupId>javax.inject</groupId>
+            <artifactId>javax.inject</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>javax.activation</groupId>
+            <artifactId>javax.activation-api</artifactId>
+        </dependency>
 
         <!-- International phone number validation support. -->
         <dependency>
@@ -193,6 +219,11 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
         </dependency>
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-core</artifactId>
+        </dependency>
+
 
         <!-- Apache ORO compatibility retained for the historical regexp annotations. -->
         <dependency>
