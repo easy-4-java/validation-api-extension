@@ -72,6 +72,7 @@
         <hutool.version>5.8.45</hutool.version>
         <jakarta-regexp.version>1.4</jakarta-regexp.version>
         <oro.version>2.0.8</oro.version>
+        <!-- Tika 2.9.4 is the newest line whose bytecode remains runnable on JDK 8. -->
         <tika.version>2.9.4</tika.version>
 
         <!-- Test dependencies. -->

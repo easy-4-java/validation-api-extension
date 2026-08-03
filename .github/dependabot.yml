@@ -4,6 +4,14 @@ updates:
     directory: "/"
     schedule:
       interval: weekly
+    # Tika 3 requires JDK 11; this branch must remain runnable on JDK 8.
+    ignore:
+      - dependency-name: org.apache.tika:tika-core
+        update-types:
+          - version-update:semver-major
+      - dependency-name: org.apache.tika:tika-parsers-standard-package
+        update-types:
+          - version-update:semver-major
   - package-ecosystem: github-actions
     directory: "/"
     schedule:
