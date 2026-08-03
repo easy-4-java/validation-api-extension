@@ -8,7 +8,18 @@
 | --- | --- | --- | --- |
 | `feature/1.0.x` | 8 | Javax Validation 2.0.1 | `1.0.x.20260630-SNAPSHOT` |
 | `feature/2.0.x` | 17 | Javax Validation 2.0.1 | `2.0.x.20260630-SNAPSHOT` |
-| `feature/3.0.x` | 17 | Jakarta Validation 3.1.1 | `3.0.x.20260630-SNAPSHOT` |
+| `feature/3.0.x` | 21 | Jakarta Validation 3.1.1 | `3.0.x.20260630-SNAPSHOT` |
+
+除 Bean Validation 的 `javax` / `jakarta` 命名空间适配外，三个版本线保持相同的公共 API、实现逻辑、注释和文档。
+依赖基线随 JDK 版本线递进，避免将较高 JDK 专用依赖带入低版本运行时：
+
+| 关键依赖 | `1.0.x` | `2.0.x` | `3.0.x` |
+| --- | --- | --- | --- |
+| Apache Tika | 2.9.4 | 3.3.1 | 3.3.2 |
+| libphonenumber | 9.0.34 | 9.0.35 | 9.0.36 |
+| Apache Commons IO | 2.18.0 | 2.20.0 | 2.22.0 |
+| Hutool Core | 5.8.45 | 5.8.46 | 5.8.47 |
+| Hibernate Validator | 6.1.7.Final | 6.2.5.Final | 9.1.3.Final |
 
 ```xml
 <dependency>
@@ -27,6 +38,7 @@
 <dependency>
     <groupId>org.apache.tika</groupId>
     <artifactId>tika-parsers-standard-package</artifactId>
+    <!-- 将版本替换为上表当前版本线对应的 Apache Tika 版本。 -->
     <version>2.9.4</version>
 </dependency>
 ```

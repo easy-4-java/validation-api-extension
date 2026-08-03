@@ -65,18 +65,18 @@
         <javax-inject.version>1</javax-inject.version>
         <javax-activation.version>1.2.0</javax-activation.version>
         <libphonenumber.version>9.0.34</libphonenumber.version>
-        <commons-lang3.version>3.20.0</commons-lang3.version>
-        <commons-io.version>2.19.0</commons-io.version>
-        <slf4j.version>2.0.18</slf4j.version>
-        <lombok.version>1.18.46</lombok.version>
-        <hutool.version>5.8.46</hutool.version>
+        <commons-lang3.version>3.18.0</commons-lang3.version>
+        <commons-io.version>2.18.0</commons-io.version>
+        <slf4j.version>2.0.17</slf4j.version>
+        <lombok.version>1.18.44</lombok.version>
+        <hutool.version>5.8.45</hutool.version>
         <jakarta-regexp.version>1.4</jakarta-regexp.version>
         <oro.version>2.0.8</oro.version>
         <tika.version>2.9.4</tika.version>
 
         <!-- Test dependencies. -->
-        <junit.version>5.12.2</junit.version>
-        <hibernate-validator.version>6.2.5.Final</hibernate-validator.version>
+        <junit.version>5.12.1</junit.version>
+        <hibernate-validator.version>6.1.7.Final</hibernate-validator.version>
         <javax-el.version>3.0.1-b12</javax-el.version>
 
         <!-- Maven runtime and build plugins. -->
