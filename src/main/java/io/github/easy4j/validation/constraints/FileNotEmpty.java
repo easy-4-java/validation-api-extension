@@ -61,4 +61,5 @@ public @interface FileNotEmpty {
      * @return 是否严格校验
      */
     boolean strict() default false;
+
 }

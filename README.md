@@ -20,8 +20,8 @@
 
 ## 文件内容类型校验
 
-组件使用 Tika 检测真实文件头及容器结构，不信任客户端文件名和 `Content-Type`。`doc/docx/xls/xlsx`
-等容器格式还需要应用显式引入标准解析包：
+组件先校验原始文件后缀，再用 Tika 检测真实文件头和容器结构；严格模式下两者必须一致，
+不信任客户端声明的 `Content-Type`。`doc/docx/xls/xlsx` 等容器格式建议应用显式引入标准解析包：
 
 ```xml
 <dependency>
@@ -48,6 +48,9 @@ public class UploadCommand {
     private UploadFile file;
 }
 ```
+
+`maxSize` 为单文件上限，等于上限时允许上传。严格模式下 Tika 文件头校验始终执行；如果运行时配置了
+匹配扩展名的 `FileContentCheckProvider` 或通配 `*/*` Provider，则会继续执行对应的业务内容检查。
 
 公共模块保留生产使用的 `FileNotEmptyValidator`、`FilesNotEmptyValidator`、
 `FileContentCheckStrategy`、`FileContentCheckProvider`、`TikaUtil` 和 `MimetypeUtil`。

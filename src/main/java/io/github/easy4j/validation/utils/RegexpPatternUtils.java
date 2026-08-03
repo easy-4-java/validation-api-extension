@@ -23,11 +23,7 @@ public class RegexpPatternUtils {
 				return ret;
 			}
 			ret = Pattern.compile(regexp);
-			Pattern existing = COMPLIED_PATTERN.putIfAbsent(regexp, ret);
-			if (existing != null) {
-				ret = existing;
-			}
-			return ret;
+			return RegexpPatternCache.cache(COMPLIED_PATTERN, regexp, ret);
 		}
 		return null;
 	}

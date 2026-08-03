@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -37,11 +38,33 @@ class FileNotEmptyConstraintTest {
     void shouldPreserveProductionValidationSemantics() {
         UploadFile detectedPdfWithDifferentSuffix = file("report.exe", "%PDF-1.7\n%%EOF");
         UploadFile fourBytes = file("data.bin", "1234");
-        UploadFile threeBytes = file("data.bin", "123");
+        UploadFile fiveBytes = file("data.bin", "12345");
 
-        assertTrue(validator.validate(new SingleUpload(detectedPdfWithDifferentSuffix)).isEmpty());
-        assertEquals(1, validator.validate(new SizeLimitedUpload(fourBytes)).size());
-        assertTrue(validator.validate(new SizeLimitedUpload(threeBytes)).isEmpty());
+        assertEquals(1, validator.validate(new SingleUpload(detectedPdfWithDifferentSuffix)).size());
+        assertTrue(validator.validate(new SizeLimitedUpload(fourBytes)).isEmpty());
+        assertEquals(1, validator.validate(new SizeLimitedUpload(fiveBytes)).size());
+    }
+
+    @Test
+    void shouldApplyNonEmptyAndSizeRulesToEveryFileInAnArray() {
+        UploadFile empty = file("empty.bin", "");
+        UploadFile fourBytes = file("data.bin", "1234");
+        UploadFile fiveBytes = file("data.bin", "12345");
+
+        assertEquals(1, validator.validate(new MultipleSizeLimitedUpload(new UploadFile[] {empty})).size());
+        assertTrue(validator.validate(new MultipleSizeLimitedUpload(new UploadFile[] {fourBytes})).isEmpty());
+        assertEquals(1, validator.validate(new MultipleSizeLimitedUpload(new UploadFile[] {fiveBytes})).size());
+    }
+
+    @Test
+    void shouldCloseStreamAfterStrictContentDetection() {
+        byte[] bytes = "%PDF-1.7\n%%EOF".getBytes(StandardCharsets.US_ASCII);
+        TrackingInputStream inputStream = new TrackingInputStream(bytes);
+        UploadFile uploadFile = new DefaultUploadFile("file", "report.pdf", "application/pdf", bytes.length,
+                () -> inputStream);
+
+        assertTrue(validator.validate(new SingleUpload(uploadFile)).isEmpty());
+        assertTrue(inputStream.closed);
     }
 
     private UploadFile file(String name, String content) {
@@ -71,6 +94,28 @@ class FileNotEmptyConstraintTest {
         private final UploadFile file;
         private SizeLimitedUpload(UploadFile file) {
             this.file = file;
+        }
+    }
+
+    private static final class MultipleSizeLimitedUpload {
+        @FileNotEmpty(maxSize = "4B")
+        private final UploadFile[] files;
+        private MultipleSizeLimitedUpload(UploadFile[] files) {
+            this.files = files;
+        }
+    }
+
+    private static final class TrackingInputStream extends ByteArrayInputStream {
+        private boolean closed;
+
+        private TrackingInputStream(byte[] bytes) {
+            super(bytes);
+        }
+
+        @Override
+        public void close() throws IOException {
+            closed = true;
+            super.close();
         }
     }
 }
