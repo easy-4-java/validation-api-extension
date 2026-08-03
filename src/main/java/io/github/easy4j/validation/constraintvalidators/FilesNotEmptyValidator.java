@@ -1,4 +1,4 @@
-package io.github.easy4j.validation.internal.constraintvalidators;
+package io.github.easy4j.validation.constraintvalidators;
 
 import cn.hutool.core.io.unit.DataSize;
 import cn.hutool.core.io.unit.DataUnit;
