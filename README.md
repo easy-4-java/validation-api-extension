@@ -1,50 +1,195 @@
+[English](./README.md) | [简体中文](./README.zh-CN.md)
+
 # validation-api-extension
 
-独立的 Bean Validation 扩展组件，提供常用约束校验器，以及基于 Apache Tika 的框架无关文件类型校验能力。
+![Java](https://img.shields.io/badge/Java-17-blue)
+![License](https://img.shields.io/badge/License-Apache%202.0-blue)
 
-## 版本线
+**Javax Validation extensions and common constraint validators** — a standalone Bean Validation (JSR-380, `javax.validation`) extension library with ready-to-use constraint annotations and framework-agnostic file upload validation backed by Apache Tika.
 
-| 分支 | Java | Bean Validation API | 组件版本 |
-| --- | --- | --- | --- |
-| `feature/1.0.x` | 8 | Javax Validation 2.0.1 | `1.0.x.20260630-SNAPSHOT` |
-| `feature/2.0.x` | 17 | Javax Validation 2.0.1 | `2.0.x.20260630-SNAPSHOT` |
-| `feature/3.0.x` | 21 | Jakarta Validation 3.1.1 | `3.0.x.20260630-SNAPSHOT` |
+**Navigation**
 
-除 Bean Validation 的 `javax` / `jakarta` 命名空间适配外，三个版本线保持相同的公共 API、实现逻辑、注释和文档。
-依赖基线随 JDK 版本线递进，避免将较高 JDK 专用依赖带入低版本运行时：
+- [1. Project Overview](#1-project-overview)
+- [2. Features & Status](#2-features--status)
+- [3. Requirements & Compatibility](#3-requirements--compatibility)
+- [4. Architecture & Modules](#4-architecture--modules)
+- [5. Installation](#5-installation)
+- [6. Quick Start](#6-quick-start)
+- [7. Configuration](#7-configuration)
+- [8. Core Usage / API](#8-core-usage--api)
+- [9. Testing & Build](#9-testing--build)
+- [10. Versioning & Branches](#10-versioning--branches)
+- [11. Contributing & License](#11-contributing--license)
 
-| 关键依赖 | `1.0.x` | `2.0.x` | `3.0.x` |
-| --- | --- | --- | --- |
+## 1. Project Overview
+
+`validation-api-extension` is a pure-Java extension for Bean Validation 2.0 (`javax.validation`). It provides:
+
+- Common constraint annotations (`@IdCard`, `@PhoneNumber`, `@Regexp`, `@Contains`, `@NumberValue`, `@StringDateValue`, `@AllowableValues`) with their validators, backed by regex property resources and libphonenumber.
+- File upload validation (`@FileNotEmpty` / `@FilesNotEmpty`) that checks file presence, extension whitelist, size limit and — in strict mode — the real file content via Apache Tika (do not trust the client-declared `Content-Type`).
+- A framework-agnostic upload model (`UploadFile`, `UploadFileAdapter` via Java SPI) whose method semantics match Spring `MultipartFile`.
+
+**What it is not**
+
+- Not a validation engine — it plugs into any Bean Validation provider (Hibernate Validator is used in tests).
+- Not a Jakarta Validation (`jakarta.validation`) build on the 1.0.x line — the 3.0.x line switches to Jakarta namespaces (see Section 10).
+- Not tied to Spring / Javalin / Quarkus — the core module depends only on the `javax.validation` API.
+
+**Typical scenarios**
+
+| Scenario | How this component helps |
+|:---|:---|
+| Validate Chinese ID card numbers | `@IdCard` |
+| Validate phone numbers per region | `@PhoneNumber(lang = "CN")` (libphonenumber) |
+| Reuse well-tested regex patterns | `@Regexp` / `@Contains` backed by `regexp_*.properties` |
+| Numeric / date-format string checks | `@NumberValue` / `@StringDateValue` |
+| Restrict field values to an allowlist | `@AllowableValues` |
+| Validate upload files (extension + size + MIME + real header) | `@FileNotEmpty` + Tika detection + `FileContentCheckStrategy` |
+
+## 2. Features & Status
+
+| Capability | Status | Description |
+|:---|:---|:---|
+| `@IdCard` | Stable | Chinese resident ID card (15/18 digits) format + checksum validation |
+| `@PhoneNumber` | Stable | Region-aware phone validation via libphonenumber (`lang` attribute, default `CN`) |
+| `@Regexp` / `@Contains` | Stable | Regex validation with `Perl5Compiler` masks, plus pattern caches loaded from `regexp_*.properties` (date, html, math, mobile, net, normal, special, sql) |
+| `@NumberValue` / `@StringDateValue` | Stable | Numeric-string and date-format-string constraints with configurable regex / pattern |
+| `@AllowableValues` | Stable | Whitelist constraint with `nullable` support |
+| `@FileNotEmpty` / `@FilesNotEmpty` | Stable | Upload validation: required flag, extension whitelist, size limit (B/KB/MB/GB/TB), MIME whitelist, strict Tika content check |
+| Real content detection | Stable | `TikaUtil.detectMimeType(...)` detects the actual file header / container, not the client-declared type |
+| SPI content checks | Stable | `FileContentCheckProvider` discovered via `ServiceLoader`, ordered by priority, dispatched by `FileContentCheckStrategy` |
+| Framework-agnostic upload model | Stable | `UploadFile` interface + `UploadFileAdapter` SPI; method semantics match Spring `MultipartFile` |
+| API compatibility gate | Stable | Clirr `api-compatibility` profile + CI job guard the public API surface |
+
+## 3. Requirements & Compatibility
+
+| Requirement | Version |
+|:---|:---|
+| JDK | 17+ (baseline of the `feature/2.0.x` branch, `maven.compiler.release=8`) |
+| Maven | 3.0+ |
+| Bean Validation API | `javax.validation:validation-api` 2.0.1.Final |
+| Runtime provider | Any JSR-380 provider (tests use Hibernate Validator 6.2.4.Final) |
+
+**Version line matrix**
+
+| Branch | JDK | Bean Validation API | Version pattern |
+|:---|:---|:---|:---|
+| `feature/1.0.x` | 8 | Javax Validation 2.0.1 | `1.0.x.*` |
+| `feature/2.0.x` | 17 | Javax Validation 2.0.1 | `2.0.x.*` |
+| `feature/3.0.x` | 21 | Jakarta Validation 3.1.1 | `3.0.x.*` |
+
+Besides the `javax` / `jakarta` namespace adaptation, the three lines keep the same public API, implementation and documentation. Dependency baselines evolve per line (verified from the branch POMs):
+
+| Key dependency | `1.0.x` | `2.0.x` | `3.0.x` |
+|:---|:---|:---|:---|
 | Apache Tika | 2.9.4 | 3.3.1 | 3.3.2 |
 | libphonenumber | 9.0.34 | 9.0.35 | 9.0.36 |
-| Apache Commons IO | 2.18.0 | 2.20.0 | 2.22.0 |
+| Apache Commons IO | 2.22.0 | 2.22.0 | 2.22.0 |
 | Hutool Core | 5.8.45 | 5.8.46 | 5.8.47 |
-| Hibernate Validator | 6.2.4.Final | 6.2.5.Final | 9.1.3.Final |
+| Hibernate Validator (test) | 6.2.4.Final | 6.2.5.Final | 9.1.3.Final |
 
-`1.0.x` 固定使用 JDK 8 可加载的最高 Apache Tika 版本 `2.9.4`（class major version 52）。
-Tika `3.2.2+` 虽修复了已知 XXE 漏洞，但其 class major version 为 55，要求 JDK 11，不能进入 JDK 8 版本线。
+The `1.0.x` line pins Apache Tika at **2.9.4**, the newest Tika version loadable on JDK 8 (class major version 52). Tika 3.2.2+ fixes known XXE issues but requires JDK 11, so it cannot enter the JDK 8 line.
+
+## 4. Architecture & Modules
+
+```text
+   Bean Validation (javax.validation, e.g. Hibernate Validator)
+                          |
+   +----------------------------------------------------+
+   | @IdCard  @PhoneNumber  @Regexp  @Contains           |
+   | @NumberValue  @StringDateValue  @AllowableValues    |
+   +----------------------------------------------------+
+                          |
+                  constraintvalidators 包
+   +----------------------------------------------------+
+   | @FileNotEmpty / @FilesNotEmpty                     |
+   |    -> FileValidationEngine                         |
+   |        * extension whitelist / size limit          |
+   |        * TikaUtil real-header detection            |
+   |        * FileContentCheckStrategy (SPI)            |
+   +----------------------------------------------------+
+```
+
+**Module list**
+
+| Module | Type | Responsibility |
+|:---|:---|:---|
+| `validation-api-extension` | Single jar (library) | Constraints, validators, upload model, Tika utilities, regex pattern resources |
+
+**Package layout** (`io.github.easy4j.validation`)
+
+| Package | Content |
+|:---|:---|
+| `constraints` | `AllowableValues`, `Contains`, `FileNotEmpty`, `IdCard`, `NumberValue`, `PhoneNumber`, `Regexp`, `StringDateValue` |
+| `constraintvalidators` | `AllowedValuesValidator`, `ContainsValidator`, `FileNotEmptyValidator`, `FilesNotEmptyValidator`, `FileValidationEngine`, `IdCardValidator`, `NumberValueValidator`, `PhoneValueValidator`, `RegexpValidator`, `StringDateValueValidator` |
+| `file` | `UploadFile`, `DefaultUploadFile`, `InputStreamSource`, `UploadFileAdapter`, `UploadFileAdapters` (ServiceLoader discovery) |
+| `provider` | `FileContentCheckProvider`, `FileContentCheckStrategy` |
+| `utils` | `TikaUtil`, `MimetypeUtil`, `IDCardUtils`, `IdcardUtils2`, `JakartaOROUtils`, `JakartaRegexpUtils`, `PatternMatchUtils`, `RegexpPatternCache`, `RegexpPatternUtils` |
+| resources | `regexp_date.properties`, `regexp_html.properties`, `regexp_math.properties`, `regexp_mobile.properties`, `regexp_net.properties`, `regexp_normal.properties`, `regexp_special.properties`, `regexp_sql.properties` |
+
+## 5. Installation
+
+> **Assumption**: artifacts are currently distributed through the project's private Maven repository (Aliyun) and GitHub Releases; the library is **not yet published to Maven Central**. If the coordinates below cannot be resolved, either add the private repository to your build or install locally with `./mvnw install`.
+
+**Maven**
 
 ```xml
 <dependency>
     <groupId>io.github.easy4j</groupId>
     <artifactId>validation-api-extension</artifactId>
-    <version>1.0.x.20260630-SNAPSHOT</version>
+    <version>2.0.x.x.20260630-SNAPSHOT</version>
 </dependency>
 ```
 
-## 文件内容类型校验
+**Gradle**
 
-组件先校验原始文件后缀，再用 Tika 检测真实文件头和容器结构；严格模式下两者必须一致，
-不信任客户端声明的 `Content-Type`。`doc/docx/xls/xlsx` 等容器格式建议应用显式引入标准解析包：
+```gradle
+implementation 'io.github.easy4j:validation-api-extension:2.0.x.x.20260630-SNAPSHOT'
+```
+
+For container formats (`doc/docx/xls/xlsx`, ...), applications are recommended to bring the standard Tika parser package explicitly (provided-scope in this library):
 
 ```xml
 <dependency>
     <groupId>org.apache.tika</groupId>
     <artifactId>tika-parsers-standard-package</artifactId>
-    <!-- 将版本替换为上表当前版本线对应的 Apache Tika 版本。 -->
     <version>2.9.4</version>
 </dependency>
 ```
+
+## 6. Quick Start
+
+**Constraint validation** (any JSR-380 provider):
+
+```java
+public class UserDto {
+
+    @IdCard
+    private String idCard;
+
+    @PhoneNumber(lang = "CN")
+    private String phone;
+
+    @NumberValue(message = "must be a numeric string")
+    private String age;
+}
+```
+
+```java
+ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+Validator validator = factory.getValidator();
+
+UserDto user = new UserDto();
+user.setIdCard("110101199003077756");  // valid checksum -> no violation
+user.setPhone("13800138000");
+user.setAge("42");
+
+Set<ConstraintViolation<UserDto>> violations = validator.validate(user);
+// Expected result: violations is empty when all values are valid;
+// invalid values yield violations with the configured messages.
+```
+
+**File upload validation**:
 
 ```java
 public class UploadCommand {
@@ -64,10 +209,69 @@ public class UploadCommand {
 }
 ```
 
-`maxSize` 为单文件上限，等于上限时允许上传。严格模式下 Tika 文件头校验始终执行；如果运行时配置了
-匹配扩展名的 `FileContentCheckProvider` 或通配 `*/*` Provider，则会继续执行对应的业务内容检查。
+`maxSize` is the per-file upper limit and equals-limit is allowed. In strict mode the Tika header check always runs; if a matching-extension `FileContentCheckProvider` or a wildcard `*/*` provider is registered at runtime, the corresponding business content check runs afterwards.
 
-公共模块保留生产使用的 `FileNotEmptyValidator`、`FilesNotEmptyValidator`、
-`FileContentCheckStrategy`、`FileContentCheckProvider`、`TikaUtil` 和 `MimetypeUtil`。
-Spring MVC、Javalin、Quarkus 仅通过 Java SPI 提供 `UploadFileAdapter`，把各自上传对象转换成
-方法语义与 Spring `MultipartFile` 一致的 `UploadFile`，公共模块不依赖具体 Web 框架。
+## 7. Configuration
+
+This is a **pure library — there is no configuration file or property prefix**. The only extension mechanism is Java SPI:
+
+- Implement `UploadFileAdapter` to convert your framework's upload object (e.g. Spring `MultipartFile`) into an `UploadFile`.
+- Implement `FileContentCheckProvider` for business-level content checks; providers are sorted by priority and dispatched by `FileContentCheckStrategy` (`load()` bootstraps the `ServiceLoader`).
+
+Register implementations in `META-INF/services/io.github.easy4j.validation.file.UploadFileAdapter` (or the provider equivalent) on your classpath.
+
+## 8. Core Usage / API
+
+**Constraint reference** (`io.github.easy4j.validation.constraints`):
+
+| Annotation | Key attributes | Backed by |
+|:---|:---|:---|
+| `@IdCard` | — | `IDCardUtils` (format + checksum) |
+| `@PhoneNumber` | `lang` (default `CN`), `value` (extra regex) | libphonenumber |
+| `@Regexp` | `mask` (default `CASE_INSENSITIVE_MASK`) | Jakarta ORO / regexp properties |
+| `@Contains` | `mask` | Jakarta ORO |
+| `@NumberValue` | `regex` (default `^[0-9\-]+$`) | regex |
+| `@StringDateValue` | `pattern` (default `yyyy-MM-dd`) | date parsing |
+| `@AllowableValues` | `allows`, `nullable` | allowlist |
+
+**File / content utilities**:
+
+```java
+// Detect the REAL content type (header / container), not the client-declared one
+MimeType mime = TikaUtil.detectMimeType(uploadFile);   // UploadFile, File or InputStream
+String mimeType = MimetypeUtil.detectMimeType(file);   // string variant by file or name
+
+// Run registered SPI content providers for a given extension
+FileContentCheckStrategy strategy = FileContentCheckStrategy.load();
+if (strategy.hasProvider("pdf")) {
+    boolean ok = strategy.check("pdf", uploadFile);
+}
+```
+
+## 9. Testing & Build
+
+```bash
+./mvnw clean verify     # unit tests + JaCoCo coverage report
+./mvnw -Papi-compatibility -Dapi.compatibility.version=<baseline> verify   # Clirr public-API check
+```
+
+- **Tests**: 6 test classes / 13 `@Test` methods covering constraints, the file validation engine and the SPI adapter discovery.
+- **Coverage gate**: JaCoCo checks a 90% line-coverage minimum at the `verify` phase (`haltOnFailure=false`).
+- **CI** (`.github/workflows/build.yml`): JDK 8 matrix running `mvn -B -ntp clean verify`, dependency review on PRs, and an API-compatibility job that diffs the current public API against the target branch with Clirr.
+
+## 10. Versioning & Branches
+
+| Branch | JDK | Validation API | Version pattern |
+|:---|:---|:---|:---|
+| `feature/1.0.x` | 8 | Javax Validation 2.0.1 | `1.0.x.*` |
+| `feature/2.0.x` | 17 | Javax Validation 2.0.1 | `2.0.x.*` |
+| `feature/3.0.x` | 21 | Jakarta Validation 3.1.1 | `3.0.x.*` |
+
+- Snapshot versions follow the `1.0.x.yyyyMMdd-SNAPSHOT` scheme; releases are tagged `v{version}` and published through the project's private repository and GitHub Releases.
+- The `1.0.x` line is the actively maintained JDK 8 / Javax line. The 2.0.x line upgrades the JDK baseline to 17 while keeping the Javax namespace; the 3.0.x line moves to Jakarta Validation 3.x on JDK 21.
+
+## 11. Contributing & License
+
+Contributions are welcome — please open an issue or a pull request on GitHub.
+
+This project is licensed under the **Apache License, Version 2.0**. See the [LICENSE](./LICENSE) file for details.
