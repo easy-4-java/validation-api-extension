@@ -1,13 +1,10 @@
-[English](./README.md) | [简体中文](./README.zh-CN.md)
-
 # validation-api-extension
 
-![Java](https://img.shields.io/badge/Java-17-blue)
-![License](https://img.shields.io/badge/License-Apache%202.0-blue)
+[English](./README.md) | [简体中文](./README.zh-CN.md)
 
-**Javax Validation extensions and common constraint validators** — a standalone Bean Validation (JSR-380, `javax.validation`) extension library with ready-to-use constraint annotations and framework-agnostic file upload validation backed by Apache Tika.
+Javax Validation extensions and common constraint validators — a standalone Bean Validation (JSR-380, `javax.validation`) extension library with ready-to-use constraint annotations and framework-agnostic file upload validation backed by Apache Tika.
 
-**Navigation**
+## Table of Contents
 
 - [1. Project Overview](#1-project-overview)
 - [2. Features & Status](#2-features--status)
