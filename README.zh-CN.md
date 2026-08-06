@@ -2,6 +2,8 @@
 
 [English](./README.md) | [简体中文](./README.zh-CN.md)
 
+[![Java](https://img.shields.io/badge/Java-8-orange)](https://github.com/easy-4-java/validation-api-extension) [![License](https://img.shields.io/badge/license-Apache%202.0-green)](./LICENSE)
+
 Javax Validation extensions and common constraint validators —— 独立的 Bean Validation（JSR-380，`javax.validation`）扩展库，提供开箱即用的约束注解，以及基于 Apache Tika 的框架无关文件上传校验能力。
 
 ## 目录
