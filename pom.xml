@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>io.github.easy4j</groupId>
@@ -12,7 +10,7 @@
     <description>Javax Validation extensions and common constraint validators</description>
     <url>https://github.com/easy-4-java/${project.artifactId}</url>
 
-    <!-- Project license information used by generated metadata and repository publishing. -->
+    
     <licenses>
         <license>
             <name>The Apache Software License, Version 2.0</name>
@@ -21,7 +19,7 @@
         </license>
     </licenses>
 
-    <!-- Source repository coordinates embedded in published POM files. -->
+    
     <scm>
         <connection>scm:git:https://github.com/easy-4-java/${project.artifactId}.git</connection>
         <developerConnection>scm:git:https://github.com/easy-4-java/${project.artifactId}.git</developerConnection>
@@ -41,7 +39,7 @@
         </developer>
     </developers>
 
-    <!-- Aliyun repositories remain the default deployment destinations. -->
+    
 	<distributionManagement>
 		<repository>
 			<id>2624322-release-6F6h6R</id>
@@ -54,34 +52,34 @@
 	</distributionManagement>
 
     <properties>
-        <!-- Java toolchain and project encoding. -->
+        
         <java.version>1.8</java.version>
         <maven.compiler.release>8</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-        <!-- Runtime dependencies. -->
+        
         <javax-validation.version>2.0.1.Final</javax-validation.version>
         <javax-inject.version>1</javax-inject.version>
         <javax-activation.version>1.2.0</javax-activation.version>
         <libphonenumber.version>9.0.34</libphonenumber.version>
-        <commons-lang3.version>3.18.0</commons-lang3.version>
-        <commons-io.version>2.18.0</commons-io.version>
-        <slf4j.version>2.0.16</slf4j.version>
-        <lombok.version>1.18.44</lombok.version>
+        <commons-lang3.version>3.20.0</commons-lang3.version>
+        <commons-io.version>2.22.0</commons-io.version>
+        <slf4j.version>2.0.18</slf4j.version>
+        <lombok.version>1.18.46</lombok.version>
         <hutool.version>5.8.45</hutool.version>
         <jakarta-regexp.version>1.4</jakarta-regexp.version>
         <oro.version>2.0.8</oro.version>
-        <!-- Tika 2.9.4 is the newest line whose bytecode remains runnable on JDK 8. -->
+        
         <tika.version>2.9.4</tika.version>
 
-        <!-- Test dependencies. -->
-        <junit.version>5.12.1</junit.version>
+        
+        <junit.version>4.13.2</junit.version>
         <hibernate-validator.version>6.2.4.Final</hibernate-validator.version>
         <jakarta-el.version>3.0.4</jakarta-el.version>
 
-        <!-- Maven runtime and build plugins. -->
-        <maven.version>3.6.3</maven.version>
+        
+        <maven.version>3.0</maven.version>
         <maven-clean-plugin.version>3.5.0</maven-clean-plugin.version>
         <clirr-maven-plugin.version>2.8</clirr-maven-plugin.version>
         <maven-compiler-plugin.version>3.15.0</maven-compiler-plugin.version>
@@ -90,18 +88,18 @@
         <maven-gpg-plugin.version>3.2.8</maven-gpg-plugin.version>
         <maven-install-plugin.version>3.1.4</maven-install-plugin.version>
         <maven-jar-plugin.version>3.5.0</maven-jar-plugin.version>
-        <maven-javadoc-plugin.version>3.12.0</maven-javadoc-plugin.version>
+        <maven-javadoc-plugin.version>3.11.2</maven-javadoc-plugin.version>
         <maven-release-plugin.version>3.3.1</maven-release-plugin.version>
         <maven-resources-plugin.version>3.5.0</maven-resources-plugin.version>
         <maven-source-plugin.version>3.4.0</maven-source-plugin.version>
-        <maven-surefire-plugin.version>3.5.6</maven-surefire-plugin.version>
+        <maven-surefire-plugin.version>3.5.2</maven-surefire-plugin.version>
         <maven-central-publishing-plugin.version>0.10.0</maven-central-publishing-plugin.version>
     </properties>
 
-    <!-- Centralize versions so the dependency list only describes usage and scope. -->
+    
     <dependencyManagement>
         <dependencies>
-            <!-- Javax Bean Validation API. -->
+            
             <dependency>
                 <groupId>javax.validation</groupId>
                 <artifactId>validation-api</artifactId>
@@ -118,13 +116,13 @@
                 <version>${javax-activation.version}</version>
             </dependency>
 
-            <!-- International phone number parsing and validation. -->
+            
             <dependency>
                 <groupId>com.googlecode.libphonenumber</groupId>
                 <artifactId>libphonenumber</artifactId>
                 <version>${libphonenumber.version}</version>
             </dependency>
-            <!-- Common string and object utilities. -->
+            
             <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-lang3</artifactId>
@@ -135,7 +133,7 @@
                 <artifactId>commons-io</artifactId>
                 <version>${commons-io.version}</version>
             </dependency>
-            <!-- Source: https://mvnrepository.com/artifact/cn.hutool/hutool-core -->
+            
             <dependency>
                 <groupId>cn.hutool</groupId>
                 <artifactId>hutool-core</artifactId>
@@ -165,21 +163,21 @@
                 <version>${tika.version}</version>
             </dependency>
 
-            <!-- SLF4J logging facade. -->
+            
             <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-api</artifactId>
                 <version>${slf4j.version}</version>
             </dependency>
 
-            <!-- Compile-time Lombok annotations and processors. -->
+            
             <dependency>
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
                 <version>${lombok.version}</version>
             </dependency>
 
-            <!-- JUnit Jupiter test engine and API. -->
+            
             <dependency>
                 <groupId>org.junit.jupiter</groupId>
                 <artifactId>junit-jupiter</artifactId>
@@ -200,111 +198,18 @@
         </dependencies>
     </dependencyManagement>
 
-    <dependencies>
-        <!-- Javax Bean Validation API. -->
-        <dependency>
-            <groupId>javax.validation</groupId>
-            <artifactId>validation-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>javax.inject</groupId>
-            <artifactId>javax.inject</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>javax.activation</groupId>
-            <artifactId>javax.activation-api</artifactId>
-        </dependency>
-
-        <!-- International phone number validation support. -->
-        <dependency>
-            <groupId>com.googlecode.libphonenumber</groupId>
-            <artifactId>libphonenumber</artifactId>
-        </dependency>
-
-        <!-- General-purpose language utilities used by validators. -->
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>cn.hutool</groupId>
-            <artifactId>hutool-core</artifactId>
-        </dependency>
-
-
-        <!-- Apache ORO compatibility retained for the historical regexp annotations. -->
-        <dependency>
-            <groupId>oro</groupId>
-            <artifactId>oro</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>jakarta-regexp</groupId>
-            <artifactId>jakarta-regexp</artifactId>
-        </dependency>
-
-        <!-- Detect real file types from content signatures instead of trusting the client filename. -->
-        <dependency>
-            <groupId>org.apache.tika</groupId>
-            <artifactId>tika-core</artifactId>
-        </dependency>
-
-        <!-- Applications opt in to the full parser set when container-aware detection is required. -->
-        <dependency>
-            <groupId>org.apache.tika</groupId>
-            <artifactId>tika-parsers-standard-package</artifactId>
-            <scope>provided</scope>
-        </dependency>
-
-        <!-- Logging API; applications provide the concrete implementation. -->
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-        </dependency>
-
-        <!-- Lombok is only needed while compiling this project. -->
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <scope>provided</scope>
-        </dependency>
-
-        <!-- Unit test API and engine. -->
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.hibernate.validator</groupId>
-            <artifactId>hibernate-validator</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.glassfish</groupId>
-            <artifactId>jakarta.el</artifactId>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
-
-    <build>
-        <!-- Plugin versions and reusable configuration are defined once here. -->
+    <dependencies><dependency><groupId>javax.validation</groupId><artifactId>validation-api</artifactId></dependency><dependency><groupId>javax.inject</groupId><artifactId>javax.inject</artifactId></dependency><dependency><groupId>javax.activation</groupId><artifactId>javax.activation-api</artifactId></dependency><dependency><groupId>com.googlecode.libphonenumber</groupId><artifactId>libphonenumber</artifactId></dependency><dependency><groupId>org.apache.commons</groupId><artifactId>commons-lang3</artifactId></dependency><dependency><groupId>commons-io</groupId><artifactId>commons-io</artifactId></dependency><dependency><groupId>cn.hutool</groupId><artifactId>hutool-core</artifactId></dependency><dependency><groupId>oro</groupId><artifactId>oro</artifactId></dependency><dependency><groupId>jakarta-regexp</groupId><artifactId>jakarta-regexp</artifactId></dependency><dependency><groupId>org.apache.tika</groupId><artifactId>tika-core</artifactId></dependency><dependency><groupId>org.apache.tika</groupId><artifactId>tika-parsers-standard-package</artifactId><scope>provided</scope></dependency><dependency><groupId>org.slf4j</groupId><artifactId>slf4j-api</artifactId></dependency><dependency><groupId>org.projectlombok</groupId><artifactId>lombok</artifactId><scope>provided</scope></dependency><dependency><groupId>org.junit.jupiter</groupId><artifactId>junit-jupiter</artifactId><scope>test</scope></dependency><dependency><groupId>org.hibernate.validator</groupId><artifactId>hibernate-validator</artifactId><scope>test</scope></dependency><dependency><groupId>org.glassfish</groupId><artifactId>jakarta.el</artifactId><scope>test</scope></dependency></dependencies><build>
+        
         <pluginManagement>
             <plugins>
-                <!-- Remove generated build output. -->
+                
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-clean-plugin</artifactId>
                     <version>${maven-clean-plugin.version}</version>
                 </plugin>
 
-                <!-- Compile production and test sources with Lombok processing enabled. -->
+                
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
@@ -323,14 +228,14 @@
                     </configuration>
                 </plugin>
 
-                <!-- Deploy project artifacts through the selected release repository. -->
+                
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-deploy-plugin</artifactId>
                     <version>${maven-deploy-plugin.version}</version>
                 </plugin>
 
-                <!-- Fail early when Maven or Java does not meet this branch's baseline. -->
+                
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-enforcer-plugin</artifactId>
@@ -362,7 +267,7 @@
                     </executions>
                 </plugin>
 
-                <!-- Sign release artifacts before publication. -->
+                
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-gpg-plugin</artifactId>
@@ -378,14 +283,14 @@
                     </executions>
                 </plugin>
 
-                <!-- Install project artifacts into the local Maven repository. -->
+                
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-install-plugin</artifactId>
                     <version>${maven-install-plugin.version}</version>
                 </plugin>
 
-                <!-- Create the main JAR with implementation metadata. -->
+                
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-jar-plugin</artifactId>
@@ -401,7 +306,7 @@
                     </configuration>
                 </plugin>
 
-                <!-- Build the API documentation JAR used by release repositories. -->
+                
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-javadoc-plugin</artifactId>
@@ -424,7 +329,7 @@
                     </executions>
                 </plugin>
 
-                <!-- Prepare and perform repeatable Maven releases. -->
+                
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-release-plugin</artifactId>
@@ -438,7 +343,7 @@
                     </configuration>
                 </plugin>
 
-                <!-- Copy and filter project resources using UTF-8. -->
+                
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-resources-plugin</artifactId>
@@ -448,7 +353,7 @@
                     </configuration>
                 </plugin>
 
-                <!-- Attach the source JAR during release builds. -->
+                
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-source-plugin</artifactId>
@@ -464,7 +369,7 @@
                     </executions>
                 </plugin>
 
-                <!-- Run JUnit tests on the classpath for all supported JDK lines. -->
+                
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
@@ -475,7 +380,7 @@
                     </configuration>
                 </plugin>
 
-                <!-- Publish release bundles through the Maven Central Portal. -->
+                
                 <plugin>
                     <groupId>org.sonatype.central</groupId>
                     <artifactId>central-publishing-maven-plugin</artifactId>
@@ -490,42 +395,11 @@
             </plugins>
         </pluginManagement>
 
-        <!-- Plugins required by every local and CI build. -->
-        <plugins>
-            <!-- Validate Maven and Java before compiling. -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-enforcer-plugin</artifactId>
-            </plugin>
-
-            <!-- Compile main and test sources. -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-            </plugin>
-
-            <!-- Process project resources. -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-resources-plugin</artifactId>
-            </plugin>
-
-            <!-- Execute unit tests. -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-            </plugin>
-
-            <!-- Package the compiled classes. -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
+        
+        </build>
 
     <profiles>
-        <!-- Compare the current public API with a caller-supplied, locally installed baseline. -->
+        
         <profile>
             <id>api-compatibility</id>
             <activation>
@@ -558,45 +432,42 @@
             </build>
         </profile>
 
-        <!--
-            Release-only work stays out of normal local builds. Activate with -Prelease
-            after Maven Central and GPG credentials have been configured.
-        -->
+        
         <profile>
             <id>release</id>
             <build>
                 <plugins>
-                    <!-- Attach source code. -->
+                    
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-source-plugin</artifactId>
                     </plugin>
 
-                    <!-- Attach generated API documentation. -->
+                    
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
                     </plugin>
 
-                    <!-- Sign all release artifacts. -->
+                    
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
                     </plugin>
 
-                    <!-- Pin deployment behavior for the deploy lifecycle. -->
+                    
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-deploy-plugin</artifactId>
                     </plugin>
 
-                    <!-- Pin the plugin used by release:prepare and release:perform. -->
+                    
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-release-plugin</artifactId>
                     </plugin>
 
-                    <!-- Upload the signed bundle to Maven Central. -->
+                    
                     <plugin>
                         <groupId>org.sonatype.central</groupId>
                         <artifactId>central-publishing-maven-plugin</artifactId>
