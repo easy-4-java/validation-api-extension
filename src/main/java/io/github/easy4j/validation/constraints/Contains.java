@@ -8,7 +8,7 @@ import org.apache.oro.text.regex.Perl5Compiler;
 import java.lang.annotation.*;
 /**
  * 正则表达式注解，用于bean的字段或者参数，检查字段是否匹配正则
- * @author hiwepy
+ * @author [@Loong Wan](https://github.com/loong10k)
  */
 @Target({ ElementType.FIELD,ElementType.PARAMETER})
 @Documented
