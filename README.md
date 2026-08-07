@@ -136,7 +136,7 @@ The `1.0.x` line pins Apache Tika at **2.9.4**, the newest Tika version loadable
 <dependency>
     <groupId>io.github.easy4j</groupId>
     <artifactId>validation-api-extension</artifactId>
-    <version>1.0.x.20260630-SNAPSHOT</version>
+    <version>2.0.x.x.20260630-SNAPSHOT</version>
 </dependency>
 ```
 
