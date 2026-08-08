@@ -5,8 +5,8 @@ import io.github.easy4j.validation.file.DefaultUploadFile;
 import io.github.easy4j.validation.file.UploadFile;
 import org.junit.jupiter.api.Test;
 
-import javax.validation.Validation;
-import javax.validation.Validator;
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;

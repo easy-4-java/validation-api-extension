@@ -9,10 +9,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 身份证工具类
+ * Extended identity card utility supporting mainland (15/18-digit), Hong Kong, and Taiwan
+ * card formats.
  *
- * @author June
- * @version 1.0, 2010-06-17
+ * @author [@Loong Wan](https://github.com/loong10k)
+ * @since 3.0.0
+ * @see IDCardUtils
  */
 public class IdcardUtils2 {
 

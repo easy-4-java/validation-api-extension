@@ -1,18 +1,21 @@
 package io.github.easy4j.validation.constraintvalidators;
 
 import io.github.easy4j.validation.constraints.StringDateValue;
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 import org.apache.commons.lang3.StringUtils;
 
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 
 /**
- * 字符串日期格式校验器
+ * Validator for the {@link io.github.easy4j.validation.constraints.StringDateValue} constraint.
  *
- * @author <a href="https://github.com/partme-ai">PartMe.AI</a>
- * @since 2021-03-08
+ * <p>Parses the input string using {@link java.text.SimpleDateFormat} in non-lenient mode
+ * and verifies that the entire string is consumed.  Blank values are considered valid.</p>
+ *
+ * @author [@Loong Wan](https://github.com/loong10k)
+ * @since 3.0.0
  */
 public class StringDateValueValidator implements ConstraintValidator<StringDateValue, String> {
 

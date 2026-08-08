@@ -5,20 +5,15 @@ import java.util.Calendar;
 import java.util.Hashtable;
 
 /**
- * <pre>
- * 身份证验证的工具（支持5位或18位省份证）
- * 身份证号码结构：
- * 17位数字和1位校验码：6位地址码数字，8位生日数字，3位出生时间顺序号，1位校验码。
- * 地址码（前6位）：表示对象常住户口所在县（市、镇、区）的行政区划代码，按GB/T2260的规定执行。
- * 出生日期码，（第七位 至十四位）：表示编码对象出生年、月、日，按GB按GB/T7408的规定执行，年、月、日代码之间不用分隔符。
- * 顺序码（第十五位至十七位）：表示在同一地址码所标示的区域范围内，对同年、同月、同日出生的人编订的顺序号，
- * 顺序码的奇数分配给男性，偶数分配给女性。
- * 校验码（第十八位数）：
- * 十七位数字本体码加权求和公式 s = sum(Ai*Wi), i = 0,,16，先对前17位数字的权求和；
- *  Ai:表示第i位置上的身份证号码数字值.Wi:表示第i位置上的加权因.Wi: 7 9 10 5 8 4 2 1 6 3 7 9 10 5 8 4 2；
- * 计算模 Y = mod(S, 11)
- * 通过模得到对应的校验码 Y: 0 1 2 3 4 5 6 7 8 9 10 校验码: 1 0 X 9 8 7 6 5 4 3 2
- * </pre>
+ * Utility class for validating Chinese mainland identity card numbers (15-digit and 18-digit
+ * formats) conforming to GB/T 2260 and GB/T 7408.
+ *
+ * <p><b>ID card structure:</b> 6-digit area code + 8-digit birth date + 3-digit sequence
+ * number + 1-digit check code (ISO 7064:1983, MOD 11-2).</p>
+ *
+ * @author [@Loong Wan](https://github.com/loong10k)
+ * @since 3.0.0
+ * @see IdcardUtils2
  */
 public abstract class IDCardUtils {
 
