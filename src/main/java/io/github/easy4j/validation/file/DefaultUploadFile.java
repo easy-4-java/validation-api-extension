@@ -6,7 +6,15 @@ import java.io.InputStream;
 import java.util.Objects;
 
 /**
- * 通用上传文件默认实现。
+ * Default, framework-agnostic implementation of {@link UploadFile}.
+ *
+ * <p>Wraps raw file metadata and an {@link InputStreamSource} to provide the standard
+ * upload-file contract without depending on any specific web framework.</p>
+ *
+ * @author [@Loong Wan](https://github.com/loong10k)
+ * @since 3.0.0
+ * @see UploadFile
+ * @see InputStreamSource
  */
 public final class DefaultUploadFile implements UploadFile {
 

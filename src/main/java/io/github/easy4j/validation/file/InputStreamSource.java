@@ -4,7 +4,12 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * 可重复打开上传内容流的框架无关函数接口。
+ * Framework-agnostic functional interface that can repeatedly open a new {@link InputStream}
+ * for the uploaded file content.
+ *
+ * @author [@Loong Wan](https://github.com/loong10k)
+ * @since 3.0.0
+ * @see DefaultUploadFile
  */
 @FunctionalInterface
 public interface InputStreamSource {

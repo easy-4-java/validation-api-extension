@@ -19,10 +19,21 @@ import io.github.easy4j.validation.constraints.IdCard;
 import io.github.easy4j.validation.utils.IDCardUtils;
 import io.github.easy4j.validation.utils.IdcardUtils2;
 import org.apache.commons.lang3.StringUtils;
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 import java.util.function.BooleanSupplier;
 
+/**
+ * Validator for the {@link io.github.easy4j.validation.constraints.IdCard} constraint.
+ *
+ * <p>Validates Chinese national ID card numbers by delegating to both
+ * {@link io.github.easy4j.validation.utils.IDCardUtils} and
+ * {@link io.github.easy4j.validation.utils.IdcardUtils2} to cover mainland 15/18-digit,
+ * Hong Kong, and Taiwan card formats.  Blank or {@code null} values are considered valid.</p>
+ *
+ * @author [@Loong Wan](https://github.com/loong10k)
+ * @since 3.0.0
+ */
 public class IdCardValidator implements ConstraintValidator<IdCard, String> {
 
 	@Override
