@@ -12,7 +12,17 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * 校验上传文件是否存在，并按需校验大小、扩展名、MIME 类型和真实文件头。
+ * Constraint annotation that validates the presence and basic integrity of an uploaded file.
+ *
+ * <p>Supports both single-file ({@link io.github.easy4j.validation.file.UploadFile}) and
+ * multi-file ({code UploadFile[]}) fields.  The annotation optionally enforces maximum file
+ * size, allowed file extensions, MIME types, and (in strict mode) real file-header detection
+ * via Apache Tika.</p>
+ *
+ * @author [@Loong Wan](https://github.com/loong10k)
+ * @since 3.0.0
+ * @see io.github.easy4j.validation.constraintvalidators.FileNotEmptyValidator
+ * @see io.github.easy4j.validation.constraintvalidators.FilesNotEmptyValidator
  */
 @Documented
 @Constraint(validatedBy = {FileNotEmptyValidator.class, FilesNotEmptyValidator.class})
@@ -21,44 +31,54 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface FileNotEmpty {
 
+    /**
+     * @return the error message template shown when validation fails
+     */
     String message() default "文件格式不正确";
 
+    /**
+     * @return the validation groups this constraint belongs to
+     */
     Class<?>[] groups() default {};
 
+    /**
+     * @return the payload associated with this constraint
+     */
     Class<? extends Payload>[] payload() default {};
 
     /**
-     * 允许的文件扩展名，不区分大小写且可以带点号。
+     * Allowed file extensions (case-insensitive, may include a leading dot).
      *
-     * @return 扩展名列表
+     * @return the list of allowed extensions
      */
     String[] extensions() default {};
 
     /**
-     * 文件是否必填。
+     * Whether the file is required (must be non-empty).
      *
-     * @return 是否必填
+     * @return {@code true} if the file must be present and non-empty
      */
     boolean required() default true;
 
     /**
-     * 单个文件最大大小，支持 B、KB、MB、GB、TB。
+     * Maximum size per file, supporting units B, KB, MB, GB, TB.
      *
-     * @return 最大文件大小
+     * @return the maximum file size string (e.g. {@code "2MB"})
      */
     String maxSize() default "2MB";
 
     /**
-     * 允许的 MIME 类型，不区分大小写。
+     * Allowed MIME types (case-insensitive).
      *
-     * @return MIME 类型列表
+     * @return the list of allowed MIME types
      */
     String[] mimeTypes() default {};
 
     /**
-     * 是否使用 Tika 校验真实文件头及容器类型。
+     * When {@code true}, Apache Tika is used to detect the real file header and container
+     * type instead of trusting the client-declared filename extension.
      *
-     * @return 是否严格校验
+     * @return whether strict file-header detection is enabled
      */
     boolean strict() default false;
 

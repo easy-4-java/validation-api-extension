@@ -23,17 +23,19 @@ import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
 
+/**
+ * Validator for the {@link io.github.easy4j.validation.constraints.Contains} constraint.
+ *
+ * <p>Uses the Apache ORO Perl5 engine to check whether the input string contains a match
+ * for the configured regular expression.  Blank or empty inputs are considered valid.</p>
+ *
+ * @author [@Loong Wan](https://github.com/loong10k)
+ * @since 3.0.0
+ */
 public class ContainsValidator implements ConstraintValidator<Contains, String>{
 
 	private String pattern;
-	/**
-     * CASE_INSENSITIVE_MASK : 区分大小写
-     * DEFAULT_MASK : 默认(不区分大小写)
-     * EXTENDED_MASK : 支持Perl5 扩展正则表达式
-     * MULTILINE_MASK : 多行匹配，^$匹配每行内容．
-     * SINGLELINE_MASK　：单行匹配  ^$匹配全部内容.
-     * READ_ONLY_MASK : Perl5Pattern 是只读的，提高性能且线程安全．
-     */
+	/** Compiled pattern mask flags. */
 	private int mask;
 
 	@Override

@@ -11,10 +11,13 @@ import jakarta.validation.ConstraintValidatorContext;
 import java.util.Objects;
 
 /**
- * 数据校验注解实现类
+ * Validator for the {@link io.github.easy4j.validation.constraints.PhoneNumber} constraint.
  *
- * @author <a href="https://github.com/partme-ai">PartMe.AI</a>
- * @since 2021-03-08
+ * <p>Uses Google's {@code libphonenumber} to parse and validate the phone number against
+ * the configured default region.  {@code null} values are considered valid.</p>
+ *
+ * @author [@Loong Wan](https://github.com/loong10k)
+ * @since 3.0.0
  */
 public class PhoneValueValidator implements ConstraintValidator<PhoneNumber, String> {
 

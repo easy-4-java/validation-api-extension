@@ -7,11 +7,15 @@ import jakarta.validation.Payload;
 import java.lang.annotation.*;
 
 /**
- * 数值格式校验注解
+ * Constraint annotation that validates whether a string matches a numeric regular expression
+ * pattern.
  *
- * <p>校验字符串是否符合指定的数值正则表达式格式。
+ * <p>The default pattern {@code "^[0-9\-]+$"} accepts digits and an optional leading minus
+ * sign.  Override via {@link #regex()} for custom numeric formats.</p>
  *
- * @author <a href="https://github.com/partme-ai">PartMe.AI</a>
+ * @author [@Loong Wan](https://github.com/loong10k)
+ * @since 3.0.0
+ * @see io.github.easy4j.validation.constraintvalidators.NumberValueValidator
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
@@ -19,11 +23,25 @@ import java.lang.annotation.*;
 @Constraint(validatedBy = {NumberValueValidator.class})
 public @interface NumberValue {
 
+    /**
+     * The regular expression the value must fully match (anchored via {@code Matcher.matches()}).
+     *
+     * @return the numeric regex pattern
+     */
     String regex() default "^[0-9\\-]+$";
 
+    /**
+     * @return the error message template shown when validation fails
+     */
     String message();
 
+    /**
+     * @return the validation groups this constraint belongs to
+     */
     Class<?>[] groups() default {};
 
+    /**
+     * @return the payload associated with this constraint
+     */
     Class<? extends Payload>[] payload() default {};
 }

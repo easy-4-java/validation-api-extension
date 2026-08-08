@@ -10,10 +10,13 @@ import java.util.regex.Pattern;
 import java.util.Objects;
 
 /**
- * 数据校验注解实现类
+ * Validator for the {@link io.github.easy4j.validation.constraints.NumberValue} constraint.
  *
- * @author <a href="https://github.com/partme-ai">PartMe.AI</a>
- * @since 2021-03-08
+ * <p>Compiles the configured regex and checks whether the entire input string matches.
+ * {@code null} values are considered valid.</p>
+ *
+ * @author [@Loong Wan](https://github.com/loong10k)
+ * @since 3.0.0
  */
 public class NumberValueValidator implements ConstraintValidator<NumberValue, String> {
 

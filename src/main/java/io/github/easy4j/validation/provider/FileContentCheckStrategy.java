@@ -15,7 +15,17 @@ import java.util.ServiceConfigurationError;
 import java.util.ServiceLoader;
 
 /**
- * 按文件扩展名选择内容检查提供者。
+ * Strategy that selects the appropriate {@link FileContentCheckProvider} based on the file
+ * extension and delegates content checks to it.
+ *
+ * <p>Providers are keyed by their {@link FileContentCheckProvider#support()} extension
+ * (normalized to lower-case, without a leading dot).  A wildcard provider with support
+ * A wildcard provider of the form {@code "*&#47;*"} acts as a catch-all fallback.  Duplicate extensions are rejected at
+ * construction time.</p>
+ *
+ * @author [@Loong Wan](https://github.com/loong10k)
+ * @since 3.0.0
+ * @see FileContentCheckProvider
  */
 public final class FileContentCheckStrategy {
 
@@ -23,6 +33,12 @@ public final class FileContentCheckStrategy {
 
     private final Map<String, FileContentCheckProvider> providers;
 
+    /**
+     * Creates a new strategy backed by the given providers.
+     *
+     * @param providers the content check providers (may be {@code null} or empty)
+     * @throws IllegalArgumentException if two providers declare the same extension
+     */
     public FileContentCheckStrategy(List<FileContentCheckProvider> providers) {
         Map<String, FileContentCheckProvider> mappings = new LinkedHashMap<String, FileContentCheckProvider>();
         if (Objects.nonNull(providers)) {
@@ -80,6 +96,14 @@ public final class FileContentCheckStrategy {
         return Objects.nonNull(findProvider(extension));
     }
 
+    /**
+     * Delegates the content check to the provider matching the given extension (or the
+     * wildcard fallback).
+     *
+     * @param extension the file extension (without a leading dot)
+     * @param uploadFile the uploaded file to check
+     * @return {@code true} if the content passes the check, or no provider matches
+     */
     public boolean check(String extension, UploadFile uploadFile) {
         FileContentCheckProvider provider = findProvider(extension);
         return Objects.nonNull(provider) && Boolean.TRUE.equals(provider.check(uploadFile));

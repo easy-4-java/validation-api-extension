@@ -8,7 +8,16 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 /**
+ * Thread-safe utility for Perl 5 regular expression matching, containment checks,
+ * and replacement using the Apache ORO library.
  *
+ * <p>Compiled patterns are cached in a bounded {@link ConcurrentHashMap} managed by
+ * {@link RegexpPatternCache}.  Each thread uses its own {@link Perl5Matcher} instance
+ * via a {@link ThreadLocal}.</p>
+ *
+ * @author [@Loong Wan](https://github.com/loong10k)
+ * @since 3.0.0
+ * @see RegexpPatternCache
  */
 @Slf4j
 public class JakartaOROUtils {
@@ -25,11 +34,12 @@ public class JakartaOROUtils {
 	};
 
 	/**
-	 * 正则表达式验证方法:匹配表达式则返回true,不匹配则返回false
-	 * @param regexp
-	 * @param mask
-	 * @param input
-	 * @return		：
+	 * Tests whether the entire input string matches the given Perl 5 regex.
+	 *
+	 * @param regexp the regular expression
+	 * @param mask   the compilation mask flags
+	 * @param input  the string to match
+	 * @return {@code true} if the entire input matches
 	 */
 	public static boolean matches(String regexp, int mask , String input) {
 		try {
@@ -80,6 +90,14 @@ public class JakartaOROUtils {
 		return false;
 	}
 
+	/**
+	 * Tests whether the input string contains a substring matching the given Perl 5 regex.
+	 *
+	 * @param regexp the regular expression
+	 * @param mask   the compilation mask flags
+	 * @param input  the string to search
+	 * @return {@code true} if the input contains a match
+	 */
 	public static boolean contains(String regexp, int mask , String input) {
 		try {
 			//实例大小大小写敏感的正规表达式模板
@@ -188,6 +206,15 @@ public class JakartaOROUtils {
         return output;
 	}
 
+	/**
+	 * Returns a compiled Perl 5 {@link Pattern} for the given regex and mask, using a
+	 * bounded cache.
+	 *
+	 * @param regexp the regular expression
+	 * @param mask   the compilation mask flags
+	 * @return the compiled pattern, or {@code null} if the regexp is blank
+	 * @throws MalformedPatternException if the regex is invalid
+	 */
 	public static Pattern getPattern(String regexp, int mask) throws MalformedPatternException {
 		if (StringUtils.isNotBlank(regexp)) {
 			String cacheKey = regexp + '\u0000' + mask;

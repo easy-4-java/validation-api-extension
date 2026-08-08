@@ -7,11 +7,14 @@ import jakarta.validation.Payload;
 import java.lang.annotation.*;
 
 /**
- * 手机号校验注解
+ * Constraint annotation that validates whether a string is a valid phone number.
  *
- * <p>校验字符串是否为有效的手机号码格式，支持国际区号。
+ * <p>Uses Google's {@code libphonenumber} library for parsing and validation.
+ * The default region is {@code "CN"} (China) and can be overridden via {@link #lang()}.</p>
  *
- * @author <a href="https://github.com/partme-ai">PartMe.AI</a>
+ * @author [@Loong Wan](https://github.com/loong10k)
+ * @since 3.0.0
+ * @see io.github.easy4j.validation.constraintvalidators.PhoneValueValidator
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
@@ -19,13 +22,33 @@ import java.lang.annotation.*;
 @Constraint(validatedBy = {PhoneValueValidator.class})
 public @interface PhoneNumber {
 
+    /**
+     * The default region code (ISO 3166-1 alpha-2) used when the phone number does not
+     * include an international dialling prefix.
+     *
+     * @return the region code (e.g. {@code "CN"}, {@code "US"})
+     */
     String lang() default "CN";
 
+    /**
+     * Reserved for future use.
+     *
+     * @return an optional value attribute
+     */
     String value() default "";
 
+    /**
+     * @return the error message template shown when validation fails
+     */
     String message();
 
+    /**
+     * @return the validation groups this constraint belongs to
+     */
     Class<?>[] groups() default {};
 
+    /**
+     * @return the payload associated with this constraint
+     */
     Class<? extends Payload>[] payload() default {};
 }

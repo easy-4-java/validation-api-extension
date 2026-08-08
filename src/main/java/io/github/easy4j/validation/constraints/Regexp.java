@@ -26,7 +26,16 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * Constraint annotation that validates whether a string field <em>fully matches</em> a Perl 5
+ * regular expression (Apache ORO engine).
+ *
+ * <p>This differs from {@link Contains} in that the entire string must match, not just a
+ * substring.  The matching engine is Apache ORO Perl5.</p>
+ *
  * @author [@Loong Wan](https://github.com/loong10k)
+ * @since 3.0.0
+ * @see io.github.easy4j.validation.constraintvalidators.RegexpValidator
+ * @see Contains
  */
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
@@ -34,6 +43,8 @@ import java.lang.annotation.Target;
 public @interface Regexp {
 
 	/**
+	 * The Perl 5 regular expression that the value must fully match.
+	 *
 	 * @return the regular expression to match
 	 */
 	String pattern();
@@ -42,18 +53,29 @@ public @interface Regexp {
 	 */
 	String message() default "{jakarta.validation.constraints.Pattern.message}";
 
+	/**
+	 * @return the validation groups this constraint belongs to
+	 */
 	Class<?>[] groups() default {};
 
+	/**
+	 * @return the payload associated with this constraint
+	 */
 	Class<? extends Payload>[] payload() default {};
 
 	/**
-     * CASE_INSENSITIVE_MASK : 区分大小写
-     * DEFAULT_MASK : 默认(不区分大小写)
-     * EXTENDED_MASK : 支持Perl5 扩展正则表达式
-     * MULTILINE_MASK : 多行匹配，^$匹配每行内容．
-     * SINGLELINE_MASK　：单行匹配  ^$匹配全部内容.
-     * READ_ONLY_MASK : Perl5Pattern 是只读的，提高性能且线程安全．
-     */
+	 * Compilation mask for the Perl 5 pattern.
+	 * <ul>
+	 *   <li>{@code CASE_INSENSITIVE_MASK} &ndash; case-sensitive matching</li>
+	 *   <li>{@code DEFAULT_MASK} &ndash; default (case-insensitive)</li>
+	 *   <li>{@code EXTENDED_MASK} &ndash; support Perl 5 extended expressions</li>
+	 *   <li>{@code MULTILINE_MASK} &ndash; multiline; {@code ^$} match each line</li>
+	 *   <li>{@code SINGLELINE_MASK} &ndash; single-line; {@code ^$} match entire content</li>
+	 *   <li>{@code READ_ONLY_MASK} &ndash; make compiled pattern read-only (thread-safe)</li>
+	 * </ul>
+	 *
+	 * @return the OR mask flags for the Perl 5 compiler
+	 */
 	int mask() default Perl5Compiler.CASE_INSENSITIVE_MASK;
 
 }

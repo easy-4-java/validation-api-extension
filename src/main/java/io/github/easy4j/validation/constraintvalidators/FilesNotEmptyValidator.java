@@ -9,11 +9,13 @@ import jakarta.validation.ConstraintValidatorContext;
 import java.util.Objects;
 
 /**
- * 多文件校验。
+ * Validator for the {@link io.github.easy4j.validation.constraints.FileNotEmpty} constraint
+ * when applied to an {@code Object[]} (multi-file) field.
+ *
+ * <p>Delegates all file safety checks to {@link FileValidationEngine}.</p>
  *
  * @author [@Loong Wan](https://github.com/loong10k)
- * @version 1.0
- * @since 2022.11.07
+ * @since 3.0.0
  */
 public class FilesNotEmptyValidator implements ConstraintValidator<FileNotEmpty, Object[]> {
 

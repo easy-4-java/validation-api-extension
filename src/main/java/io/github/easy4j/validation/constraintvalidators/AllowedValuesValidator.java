@@ -10,10 +10,14 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
- * 验证值是否在指定范围内
+ * Validator for the {@link io.github.easy4j.validation.constraints.AllowableValues} constraint.
  *
- * @author <a href="https://github.com/partme-ai">PartMe.AI</a>
- * @since 2021-03-08
+ * <p>Splits the comma-separated {@code allows} value, trims each entry, and checks
+ * whether the input is contained in the resulting set.  Blank values are accepted only
+ * when {@code nullable = true}.</p>
+ *
+ * @author [@Loong Wan](https://github.com/loong10k)
+ * @since 3.0.0
  */
 public class AllowedValuesValidator implements ConstraintValidator<AllowableValues, String> {
 

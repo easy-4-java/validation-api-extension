@@ -7,11 +7,15 @@ import jakarta.validation.Payload;
 import java.lang.annotation.*;
 
 /**
- * 字符串日期格式校验注解
+ * Constraint annotation that validates whether a string conforms to a date format pattern.
  *
- * <p>校验字符串是否符合指定的日期格式（如 yyyy-MM-dd），使用严格的日期解析。
+ * <p>Uses {@link java.text.SimpleDateFormat} with <em>lenient</em> mode disabled so that
+ * only strictly valid dates are accepted (e.g. {@code "2026-02-29"} is rejected in a
+ * non-leap year).  The default pattern is {@code "yyyy-MM-dd"}.</p>
  *
- * @author <a href="https://github.com/partme-ai">PartMe.AI</a>
+ * @author [@Loong Wan](https://github.com/loong10k)
+ * @since 3.0.0
+ * @see io.github.easy4j.validation.constraintvalidators.StringDateValueValidator
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
@@ -19,11 +23,25 @@ import java.lang.annotation.*;
 @Constraint(validatedBy = {StringDateValueValidator.class})
 public @interface StringDateValue {
 
+    /**
+     * The date format pattern used by {@link java.text.SimpleDateFormat}.
+     *
+     * @return the date pattern (e.g. {@code "yyyy-MM-dd"})
+     */
     String pattern() default "yyyy-MM-dd";
 
+    /**
+     * @return the error message template shown when validation fails
+     */
     String message();
 
+    /**
+     * @return the validation groups this constraint belongs to
+     */
     Class<?>[] groups() default {};
 
+    /**
+     * @return the payload associated with this constraint
+     */
     Class<? extends Payload>[] payload() default {};
 }

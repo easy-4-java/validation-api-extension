@@ -8,7 +8,17 @@ import java.util.ServiceConfigurationError;
 import java.util.ServiceLoader;
 
 /**
- * 通过 Java SPI 查找上传文件适配器。
+ * Registry that discovers and delegates to {@link UploadFileAdapter} implementations via
+ * the Java {@link ServiceLoader} SPI mechanism.
+ *
+ * <p>If the value is already an {@link UploadFile} it is returned directly.  Otherwise
+ * the registered adapters are consulted; if exactly one adapter supports the value it is
+ * used, and if more than one matches an {@link IllegalStateException} is thrown to signal
+ * ambiguity.</p>
+ *
+ * @author [@Loong Wan](https://github.com/loong10k)
+ * @since 3.0.0
+ * @see UploadFileAdapter
  */
 public final class UploadFileAdapters {
 
@@ -17,6 +27,17 @@ public final class UploadFileAdapters {
     private UploadFileAdapters() {
     }
 
+    /**
+     * Adapts the given value to an {@link UploadFile}.
+     *
+     * <p>If the value is already an {@link UploadFile} it is returned as-is.  If exactly one
+     * SPI adapter supports the value, the adapter is used.  If more than one adapter matches,
+     * an {@link IllegalStateException} is thrown.</p>
+     *
+     * @param value the raw upload object (may be {@code null})
+     * @return the adapted upload file, or {@code null} if no adapter supports the value
+     * @throws IllegalStateException if more than one adapter supports the value
+     */
     public static UploadFile adapt(Object value) {
         if (value instanceof UploadFile) {
             return (UploadFile) value;
