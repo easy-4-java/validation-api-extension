@@ -23,9 +23,15 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * 文件约束的统一校验引擎。
+ * Unified validation engine for the {@link io.github.easy4j.validation.constraints.FileNotEmpty}
+ * constraint.
  *
- * <p>单文件与多文件校验器仅处理输入容器差异，所有文件安全策略均由本类执行，避免两套逻辑再次分叉。</p>
+ * <p>Both the single-file and multi-file validators delegate all file safety checks (size,
+ * extension, MIME type, and optional strict Tika-based content detection) to this class so
+ * that the validation logic is defined in exactly one place.</p>
+ *
+ * @author [@Loong Wan](https://github.com/loong10k)
+ * @since 3.0.0
  */
 final class FileValidationEngine {
 

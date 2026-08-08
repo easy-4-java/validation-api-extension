@@ -16,8 +16,8 @@
 package io.github.easy4j.validation.constraints;
 
 import io.github.easy4j.validation.constraintvalidators.IdCardValidator;
-import javax.validation.Constraint;
-import javax.validation.Payload;
+import jakarta.validation.Constraint;
+import jakarta.validation.Payload;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -27,7 +27,12 @@ import java.lang.annotation.Target;
 
 
 /**
+ * Constraint annotation that validates whether a string is a valid Chinese national ID card
+ * number (15-digit or 18-digit format, including mainland, Hong Kong, and Taiwan variants).
+ *
  * @author [@Loong Wan](https://github.com/loong10k)
+ * @since 3.0.0
+ * @see io.github.easy4j.validation.constraintvalidators.IdCardValidator
  */
 @Target({ElementType.FIELD, ElementType.PARAMETER, ElementType.TYPE_USE})
 @Documented
@@ -38,10 +43,16 @@ public @interface IdCard {
 	/**
 	 * @return the error message template
 	 */
-	String message() default "{javax.validation.constraints.Pattern.message}";
+	String message() default "{jakarta.validation.constraints.Pattern.message}";
 
+	/**
+	 * @return the validation groups this constraint belongs to
+	 */
 	Class<?>[] groups() default {};
 
+	/**
+	 * @return the payload associated with this constraint
+	 */
 	Class<? extends Payload>[] payload() default {};
 
 }

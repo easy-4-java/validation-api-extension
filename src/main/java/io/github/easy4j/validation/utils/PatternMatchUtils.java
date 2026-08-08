@@ -4,11 +4,14 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Utility methods for simple pattern matching, in particular for
- * Spring's typical "xxx*", "*xxx" and "*xxx*" pattern styles.
+ * Utility methods for simple pattern matching, in particular for Spring's typical
+ * {@code "xxx*"}, {@code "*xxx"} and {@code "*xxx*"} pattern styles.
  *
- * @author Juergen Hoeller
- * @since 2.0
+ * <p>Also provides a full regex matching helper backed by {@link RegexpPatternUtils}.</p>
+ *
+ * @author [@Loong Wan](https://github.com/loong10k)
+ * @since 3.0.0
+ * @see RegexpPatternUtils
  */
 public abstract class PatternMatchUtils {
 
