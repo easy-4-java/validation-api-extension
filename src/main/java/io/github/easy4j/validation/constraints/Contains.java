@@ -14,7 +14,7 @@ import java.lang.annotation.*;
  * (via {@code contains}) rather than matching the entire string.  The matching engine is
  * Apache ORO Perl5.</p>
  *
- * @author [@Loong Wan](https://github.com/loong10k)
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  * @since 3.0.0
  * @see io.github.easy4j.validation.constraintvalidators.ContainsValidator
  * @see Regexp

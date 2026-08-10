@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
  * <p>Compiled {@link Pattern} instances are cached in a bounded {@link ConcurrentHashMap}
  * managed by {@link RegexpPatternCache}.</p>
  *
- * @author [@Loong Wan](https://github.com/loong10k)
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  * @since 3.0.0
  * @see RegexpPatternCache
  */

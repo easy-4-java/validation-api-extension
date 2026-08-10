@@ -14,7 +14,7 @@ import java.lang.annotation.*;
  * trimmed before comparison.  When {@link #nullable()} is {@code true}, blank or {@code null}
  * values are considered valid; otherwise the value must appear in the allowed set.</p>
  *
- * @author [@Loong Wan](https://github.com/loong10k)
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  * @since 3.0.0
  * @see io.github.easy4j.validation.constraintvalidators.AllowedValuesValidator
  */

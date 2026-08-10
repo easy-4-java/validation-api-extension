@@ -32,7 +32,7 @@ import java.lang.annotation.Target;
  * <p>This differs from {@link Contains} in that the entire string must match, not just a
  * substring.  The matching engine is Apache ORO Perl5.</p>
  *
- * @author [@Loong Wan](https://github.com/loong10k)
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  * @since 3.0.0
  * @see io.github.easy4j.validation.constraintvalidators.RegexpValidator
  * @see Contains

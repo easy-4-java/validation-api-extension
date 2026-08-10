@@ -30,7 +30,7 @@ import java.util.stream.Stream;
  * extension, MIME type, and optional strict Tika-based content detection) to this class so
  * that the validation logic is defined in exactly one place.</p>
  *
- * @author [@Loong Wan](https://github.com/loong10k)
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  * @since 3.0.0
  */
 final class FileValidationEngine {

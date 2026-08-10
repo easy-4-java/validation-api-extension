@@ -15,7 +15,7 @@ import java.util.Objects;
  * <p>Compiles the configured regex and checks whether the entire input string matches.
  * {@code null} values are considered valid.</p>
  *
- * @author [@Loong Wan](https://github.com/loong10k)
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  * @since 3.0.0
  */
 public class NumberValueValidator implements ConstraintValidator<NumberValue, String> {

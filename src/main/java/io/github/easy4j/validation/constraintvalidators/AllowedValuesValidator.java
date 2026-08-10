@@ -16,7 +16,7 @@ import java.util.Set;
  * whether the input is contained in the resulting set.  Blank values are accepted only
  * when {@code nullable = true}.</p>
  *
- * @author [@Loong Wan](https://github.com/loong10k)
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  * @since 3.0.0
  */
 public class AllowedValuesValidator implements ConstraintValidator<AllowableValues, String> {

@@ -7,7 +7,7 @@ import java.io.InputStream;
  * Framework-agnostic interface representing an uploaded file, with method semantics
  * aligned to Spring's {@code MultipartFile}.
  *
- * @author [@Loong Wan](https://github.com/loong10k)
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  * @since 3.0.0
  * @see DefaultUploadFile
  * @see UploadFileAdapter

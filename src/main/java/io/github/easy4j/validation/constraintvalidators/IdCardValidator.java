@@ -31,7 +31,7 @@ import java.util.function.BooleanSupplier;
  * {@link io.github.easy4j.validation.utils.IdcardUtils2} to cover mainland 15/18-digit,
  * Hong Kong, and Taiwan card formats.  Blank or {@code null} values are considered valid.</p>
  *
- * @author [@Loong Wan](https://github.com/loong10k)
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  * @since 3.0.0
  */
 public class IdCardValidator implements ConstraintValidator<IdCard, String> {

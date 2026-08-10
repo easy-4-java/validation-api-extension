@@ -30,7 +30,7 @@ import java.lang.annotation.Target;
  * Constraint annotation that validates whether a string is a valid Chinese national ID card
  * number (15-digit or 18-digit format, including mainland, Hong Kong, and Taiwan variants).
  *
- * @author [@Loong Wan](https://github.com/loong10k)
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  * @since 3.0.0
  * @see io.github.easy4j.validation.constraintvalidators.IdCardValidator
  */

@@ -13,7 +13,7 @@ import java.lang.annotation.*;
  * <p>The default pattern {@code "^[0-9\-]+$"} accepts digits and an optional leading minus
  * sign.  Override via {@link #regex()} for custom numeric formats.</p>
  *
- * @author [@Loong Wan](https://github.com/loong10k)
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  * @since 3.0.0
  * @see io.github.easy4j.validation.constraintvalidators.NumberValueValidator
  */

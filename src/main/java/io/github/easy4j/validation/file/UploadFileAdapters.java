@@ -16,7 +16,7 @@ import java.util.ServiceLoader;
  * used, and if more than one matches an {@link IllegalStateException} is thrown to signal
  * ambiguity.</p>
  *
- * @author [@Loong Wan](https://github.com/loong10k)
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  * @since 3.0.0
  * @see UploadFileAdapter
  */

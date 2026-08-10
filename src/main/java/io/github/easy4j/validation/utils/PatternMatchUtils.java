@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
  *
  * <p>Also provides a full regex matching helper backed by {@link RegexpPatternUtils}.</p>
  *
- * @author [@Loong Wan](https://github.com/loong10k)
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  * @since 3.0.0
  * @see RegexpPatternUtils
  */

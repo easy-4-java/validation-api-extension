@@ -12,7 +12,7 @@ import java.util.Map;
  * Extended identity card utility supporting mainland (15/18-digit), Hong Kong, and Taiwan
  * card formats.
  *
- * @author [@Loong Wan](https://github.com/loong10k)
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  * @since 3.0.0
  * @see IDCardUtils
  */

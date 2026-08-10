@@ -7,7 +7,7 @@ package io.github.easy4j.validation.file;
  * <p>Implementations are discovered via {@link java.util.ServiceLoader} and registered
  * with {@link UploadFileAdapters}.</p>
  *
- * @author [@Loong Wan](https://github.com/loong10k)
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  * @since 3.0.0
  * @see UploadFileAdapters
  */

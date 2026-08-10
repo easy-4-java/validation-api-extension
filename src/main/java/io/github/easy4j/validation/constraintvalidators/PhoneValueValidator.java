@@ -16,7 +16,7 @@ import java.util.Objects;
  * <p>Uses Google's {@code libphonenumber} to parse and validate the phone number against
  * the configured default region.  {@code null} values are considered valid.</p>
  *
- * @author [@Loong Wan](https://github.com/loong10k)
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  * @since 3.0.0
  */
 public class PhoneValueValidator implements ConstraintValidator<PhoneNumber, String> {

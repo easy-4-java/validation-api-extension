@@ -11,7 +11,7 @@ import java.util.Hashtable;
  * <p><b>ID card structure:</b> 6-digit area code + 8-digit birth date + 3-digit sequence
  * number + 1-digit check code (ISO 7064:1983, MOD 11-2).</p>
  *
- * @author [@Loong Wan](https://github.com/loong10k)
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  * @since 3.0.0
  * @see IdcardUtils2
  */

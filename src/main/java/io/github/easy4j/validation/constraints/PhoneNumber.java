@@ -12,7 +12,7 @@ import java.lang.annotation.*;
  * <p>Uses Google's {@code libphonenumber} library for parsing and validation.
  * The default region is {@code "CN"} (China) and can be overridden via {@link #lang()}.</p>
  *
- * @author [@Loong Wan](https://github.com/loong10k)
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  * @since 3.0.0
  * @see io.github.easy4j.validation.constraintvalidators.PhoneValueValidator
  */

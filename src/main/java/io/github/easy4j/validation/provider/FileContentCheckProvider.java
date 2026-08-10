@@ -9,7 +9,7 @@ import io.github.easy4j.validation.file.UploadFile;
  * <p>Implementations are discovered via {@link java.util.ServiceLoader} and registered
  * with {@link FileContentCheckStrategy}.</p>
  *
- * @author [@Loong Wan](https://github.com/loong10k)
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  * @since 3.0.0
  * @see FileContentCheckStrategy
  */

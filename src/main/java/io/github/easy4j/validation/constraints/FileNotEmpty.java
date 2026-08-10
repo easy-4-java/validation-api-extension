@@ -19,7 +19,7 @@ import java.lang.annotation.Target;
  * size, allowed file extensions, MIME types, and (in strict mode) real file-header detection
  * via Apache Tika.</p>
  *
- * @author [@Loong Wan](https://github.com/loong10k)
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  * @since 3.0.0
  * @see io.github.easy4j.validation.constraintvalidators.FileNotEmptyValidator
  * @see io.github.easy4j.validation.constraintvalidators.FilesNotEmptyValidator

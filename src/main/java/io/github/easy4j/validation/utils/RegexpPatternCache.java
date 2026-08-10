@@ -10,7 +10,7 @@ import java.util.concurrent.ConcurrentMap;
  * and patterns are recompiled on demand, preserving the original public API and concurrent
  * read behaviour of the utility classes.</p>
  *
- * @author [@Loong Wan](https://github.com/loong10k)
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  * @since 3.0.0
  */
 final class RegexpPatternCache {

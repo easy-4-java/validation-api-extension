@@ -17,7 +17,7 @@ import java.util.Objects;
  * <p>Unlike filename-based detection, Tika inspects the actual file content (magic bytes)
  * to determine the true MIME type, which helps guard against spoofed file extensions.</p>
  *
- * @author [@Loong Wan](https://github.com/loong10k)
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  * @since 3.0.0
  * @see MimetypeUtil
  */

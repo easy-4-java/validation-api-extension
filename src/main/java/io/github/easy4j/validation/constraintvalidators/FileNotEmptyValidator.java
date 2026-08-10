@@ -14,7 +14,7 @@ import java.util.Objects;
  *
  * <p>Delegates all file safety checks to {@link FileValidationEngine}.</p>
  *
- * @author [@Loong Wan](https://github.com/loong10k)
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  * @since 3.0.0
  */
 public class FileNotEmptyValidator implements ConstraintValidator<FileNotEmpty, Object> {

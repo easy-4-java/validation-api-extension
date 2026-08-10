@@ -15,7 +15,7 @@ import java.util.concurrent.ConcurrentMap;
  * {@link RegexpPatternCache}.  Each thread uses its own {@link Perl5Matcher} instance
  * via a {@link ThreadLocal}.</p>
  *
- * @author [@Loong Wan](https://github.com/loong10k)
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  * @since 3.0.0
  * @see RegexpPatternCache
  */

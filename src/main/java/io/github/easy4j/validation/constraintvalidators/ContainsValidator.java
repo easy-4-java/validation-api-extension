@@ -29,7 +29,7 @@ import jakarta.validation.ConstraintValidatorContext;
  * <p>Uses the Apache ORO Perl5 engine to check whether the input string contains a match
  * for the configured regular expression.  Blank or empty inputs are considered valid.</p>
  *
- * @author [@Loong Wan](https://github.com/loong10k)
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  * @since 3.0.0
  */
 public class ContainsValidator implements ConstraintValidator<Contains, String>{

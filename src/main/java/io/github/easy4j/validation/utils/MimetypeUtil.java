@@ -8,7 +8,7 @@ import java.util.Objects;
  * Utility for detecting MIME types from file names or local files using the Jakarta
  * Activation {@link MimetypesFileTypeMap}.
  *
- * @author [@Loong Wan](https://github.com/loong10k)
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  * @since 3.0.0
  * @see TikaUtil
  */

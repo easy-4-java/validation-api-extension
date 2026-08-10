@@ -11,7 +11,7 @@ import java.util.Objects;
  * <p>Wraps raw file metadata and an {@link InputStreamSource} to provide the standard
  * upload-file contract without depending on any specific web framework.</p>
  *
- * @author [@Loong Wan](https://github.com/loong10k)
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  * @since 3.0.0
  * @see UploadFile
  * @see InputStreamSource

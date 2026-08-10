@@ -28,7 +28,7 @@ import org.apache.commons.lang3.StringUtils;
  * <p>Uses the Apache ORO Perl5 engine to check whether the entire input string matches
  * the configured regular expression.  Blank or empty inputs are considered valid.</p>
  *
- * @author [@Loong Wan](https://github.com/loong10k)
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  * @since 3.0.0
  */
 public class RegexpValidator implements ConstraintValidator<Regexp, String>{

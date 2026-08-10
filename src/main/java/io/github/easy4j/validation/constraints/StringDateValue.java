@@ -13,7 +13,7 @@ import java.lang.annotation.*;
  * only strictly valid dates are accepted (e.g. {@code "2026-02-29"} is rejected in a
  * non-leap year).  The default pattern is {@code "yyyy-MM-dd"}.</p>
  *
- * @author [@Loong Wan](https://github.com/loong10k)
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  * @since 3.0.0
  * @see io.github.easy4j.validation.constraintvalidators.StringDateValueValidator
  */
