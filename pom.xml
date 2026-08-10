@@ -61,7 +61,6 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
         <!-- Dependency versions -->
-        <central-maven-publishing-plugin.version>0.11.0</central-maven-publishing-plugin.version>
         <commons-io.version>2.22.0</commons-io.version>
         <commons-lang.version>2.6</commons-lang.version>
         <commons-lang3.version>3.20.0</commons-lang3.version>
