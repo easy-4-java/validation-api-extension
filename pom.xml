@@ -53,47 +53,48 @@
 
     <!-- 版本属性定义：Java 版本、依赖版本与 Maven 插件版本统一管理 -->
     <properties>
-        <central-maven-publishing-plugin.version>0.11.0</central-maven-publishing-plugin.version>
-        <java.version>17</java.version>
-        <maven.compiler.release>${java.version}</maven.compiler.release>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<api.compatibility.version>0.0.0</api.compatibility.version>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <javax-validation.version>2.0.1.Final</javax-validation.version>
-        <javax-inject.version>1</javax-inject.version>
-        <javax-activation.version>1.2.0</javax-activation.version>
-        <libphonenumber.version>9.0.35</libphonenumber.version>
-        <commons-lang3.version>3.20.0</commons-lang3.version>
-        <commons-io.version>2.22.0</commons-io.version>
-        <slf4j.version>2.0.18</slf4j.version>
-        <lombok.version>1.18.46</lombok.version>
-        <hutool.version>5.8.46</hutool.version>
-        <jakarta-regexp.version>1.4</jakarta-regexp.version>
-        <oro.version>2.0.8</oro.version>
-        <tika.version>3.3.1</tika.version>
-        <junit.version>4.13.2</junit.version>
-        <hibernate-validator.version>6.2.5.Final</hibernate-validator.version>
-        <jakarta-el.version>3.0.4</jakarta-el.version>
-        <maven.version>3.0</maven.version>
-        <!-- Maven Plugin versions -->
-        <maven-clean-plugin.version>3.5.0</maven-clean-plugin.version>
-        <clirr-maven-plugin.version>2.8</clirr-maven-plugin.version>
-        <maven-compiler-plugin.version>3.15.0</maven-compiler-plugin.version>
-        <maven-deploy-plugin.version>3.1.4</maven-deploy-plugin.version>
-        <maven-enforcer-plugin.version>3.6.3</maven-enforcer-plugin.version>
-        <maven-gpg-plugin.version>3.2.8</maven-gpg-plugin.version>
-        <maven-install-plugin.version>3.1.4</maven-install-plugin.version>
-        <maven-jar-plugin.version>3.5.0</maven-jar-plugin.version>
-        <maven-javadoc-plugin.version>3.11.2</maven-javadoc-plugin.version>
-        <maven-release-plugin.version>3.3.1</maven-release-plugin.version>
-        <maven-resources-plugin.version>3.5.0</maven-resources-plugin.version>
-        <maven-source-plugin.version>3.4.0</maven-source-plugin.version>
-        <maven-surefire-plugin.version>3.5.2</maven-surefire-plugin.version>
-        <maven-central-publishing-plugin.version>0.11.0</maven-central-publishing-plugin.version>
-        <maven-jacoco-plugin.version>0.8.15</maven-jacoco-plugin.version>
-    
-		<junit-jupiter.version>6.1.0</junit-jupiter.version>
-		<commons-lang.version>2.6</commons-lang.version></properties>
+            <java.version>17</java.version>
+            <maven.compiler.release>${java.version}</maven.compiler.release>
+            <maven.version>3.0</maven.version>
+            <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+            <!-- Dependency versions -->
+            <api.compatibility.version>0.0.0</api.compatibility.version>
+            <central-maven-publishing-plugin.version>0.11.0</central-maven-publishing-plugin.version>
+            <clirr-maven-plugin.version>2.8</clirr-maven-plugin.version>
+            <commons-io.version>2.22.0</commons-io.version>
+            <commons-lang3.version>3.20.0</commons-lang3.version>
+            <commons-lang.version>2.6</commons-lang.version>
+            <hibernate-validator.version>6.2.5.Final</hibernate-validator.version>
+            <hutool.version>5.8.46</hutool.version>
+            <jakarta-el.version>3.0.4</jakarta-el.version>
+            <jakarta-regexp.version>1.4</jakarta-regexp.version>
+            <javax-activation.version>1.2.0</javax-activation.version>
+            <javax-inject.version>1</javax-inject.version>
+            <javax-validation.version>2.0.1.Final</javax-validation.version>
+            <junit-jupiter.version>6.1.0</junit-jupiter.version>
+            <junit.version>4.13.2</junit.version>
+            <libphonenumber.version>9.0.35</libphonenumber.version>
+            <lombok.version>1.18.46</lombok.version>
+            <oro.version>2.0.8</oro.version>
+            <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+            <slf4j.version>2.0.18</slf4j.version>
+            <tika.version>3.3.1</tika.version>
+            <!-- Maven Plugin versions -->
+            <maven-central-publishing-plugin.version>0.11.0</maven-central-publishing-plugin.version>
+            <maven-clean-plugin.version>3.5.0</maven-clean-plugin.version>
+            <maven-compiler-plugin.version>3.15.0</maven-compiler-plugin.version>
+            <maven-deploy-plugin.version>3.1.4</maven-deploy-plugin.version>
+            <maven-enforcer-plugin.version>3.6.3</maven-enforcer-plugin.version>
+            <maven-gpg-plugin.version>3.2.8</maven-gpg-plugin.version>
+            <maven-install-plugin.version>3.1.4</maven-install-plugin.version>
+            <maven-jacoco-plugin.version>0.8.15</maven-jacoco-plugin.version>
+            <maven-jar-plugin.version>3.5.0</maven-jar-plugin.version>
+            <maven-javadoc-plugin.version>3.11.2</maven-javadoc-plugin.version>
+            <maven-release-plugin.version>3.3.1</maven-release-plugin.version>
+            <maven-resources-plugin.version>3.5.0</maven-resources-plugin.version>
+            <maven-source-plugin.version>3.4.0</maven-source-plugin.version>
+            <maven-surefire-plugin.version>3.5.2</maven-surefire-plugin.version>
+    </properties>
 
     <!-- 依赖版本统一管理（dependencyManagement） -->
     <dependencyManagement>
