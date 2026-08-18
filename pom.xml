@@ -73,7 +73,7 @@
         <javax-validation.version>2.0.1.Final</javax-validation.version>
         <junit-jupiter.version>6.1.0</junit-jupiter.version>
         <junit.version>4.13.2</junit.version>
-        <libphonenumber.version>9.0.35</libphonenumber.version>
+        <libphonenumber.version>9.0.37</libphonenumber.version>
         <lombok.version>1.18.46</lombok.version>
         <oro.version>2.0.8</oro.version>
         <slf4j.version>2.0.18</slf4j.version>
