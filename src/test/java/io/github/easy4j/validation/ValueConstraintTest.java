@@ -4,8 +4,8 @@ import io.github.easy4j.validation.constraints.AllowableValues;
 import io.github.easy4j.validation.constraints.StringDateValue;
 import org.junit.jupiter.api.Test;
 
-import jakarta.validation.Validation;
-import jakarta.validation.Validator;
+import javax.validation.Validation;
+import javax.validation.Validator;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

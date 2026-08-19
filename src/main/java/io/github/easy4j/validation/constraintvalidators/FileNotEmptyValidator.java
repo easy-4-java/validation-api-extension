@@ -4,8 +4,8 @@ import io.github.easy4j.validation.constraints.FileNotEmpty;
 import io.github.easy4j.validation.provider.FileContentCheckStrategy;
 
 import jakarta.inject.Inject;
-import jakarta.validation.ConstraintValidator;
-import jakarta.validation.ConstraintValidatorContext;
+import javax.validation.ConstraintValidator;
+import javax.validation.ConstraintValidatorContext;
 import java.util.Objects;
 
 /**

@@ -1,8 +1,8 @@
 package io.github.easy4j.validation.constraints;
 
 import io.github.easy4j.validation.constraintvalidators.ContainsValidator;
-import jakarta.validation.Constraint;
-import jakarta.validation.Payload;
+import javax.validation.Constraint;
+import javax.validation.Payload;
 import org.apache.oro.text.regex.Perl5Compiler;
 
 import java.lang.annotation.*;
@@ -34,7 +34,7 @@ public @interface Contains {
 	/**
 	 * @return the error message template
 	 */
-	String message() default "{jakarta.validation.constraints.Pattern.message}";
+	String message() default "{javax.validation.constraints.Pattern.message}";
 
 	/**
 	 * @return the validation groups this constraint belongs to
