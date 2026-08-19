@@ -19,8 +19,8 @@ import io.github.easy4j.validation.constraints.Contains;
 import io.github.easy4j.validation.utils.JakartaOROUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import jakarta.validation.ConstraintValidator;
-import jakarta.validation.ConstraintValidatorContext;
+import javax.validation.ConstraintValidator;
+import javax.validation.ConstraintValidatorContext;
 
 
 /**

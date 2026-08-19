@@ -19,8 +19,8 @@ import io.github.easy4j.validation.constraints.IdCard;
 import io.github.easy4j.validation.utils.IDCardUtils;
 import io.github.easy4j.validation.utils.IdcardUtils2;
 import org.apache.commons.lang3.StringUtils;
-import jakarta.validation.ConstraintValidator;
-import jakarta.validation.ConstraintValidatorContext;
+import javax.validation.ConstraintValidator;
+import javax.validation.ConstraintValidatorContext;
 import java.util.function.BooleanSupplier;
 
 /**

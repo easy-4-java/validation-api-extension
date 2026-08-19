@@ -2,8 +2,8 @@ package io.github.easy4j.validation.constraints;
 
 
 import io.github.easy4j.validation.constraintvalidators.AllowedValuesValidator;
-import jakarta.validation.Constraint;
-import jakarta.validation.Payload;
+import javax.validation.Constraint;
+import javax.validation.Payload;
 
 import java.lang.annotation.*;
 
