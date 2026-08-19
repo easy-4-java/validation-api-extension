@@ -195,7 +195,12 @@
                 <artifactId>jakarta.el</artifactId>
                 <version>${jakarta-el.version}</version>
             </dependency>
-        </dependencies>
+                <dependency>
+            <groupId>jakarta.activation</groupId>
+            <artifactId>jakarta.activation-api</artifactId>
+            <version>2.1.2</version>
+        </dependency>
+    </dependencies>
     </dependencyManagement>
 
     <!-- 项目依赖（dependencies） -->

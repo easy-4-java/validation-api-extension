@@ -1,6 +1,6 @@
 package io.github.easy4j.validation.utils;
 
-import javax.activation.MimetypesFileTypeMap;
+import jakarta.activation.MimetypesFileTypeMap;
 import java.io.File;
 import java.util.Objects;
 
