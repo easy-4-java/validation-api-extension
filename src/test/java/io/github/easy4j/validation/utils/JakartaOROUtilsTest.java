@@ -1,6 +1,7 @@
 package io.github.easy4j.validation.utils;
 
 import org.apache.oro.text.regex.MalformedPatternException;
+import org.apache.oro.text.regex.Pattern;
 import org.apache.oro.text.regex.Perl5Compiler;
 import org.junit.jupiter.api.Test;
 
@@ -72,8 +73,8 @@ class JakartaOROUtilsTest {
     @Test
     void shouldCachePattern() throws MalformedPatternException {
         JakartaOROUtils.COMPLIED_PATTERN.clear();
-        var p1 = JakartaOROUtils.getPattern("\\d+", Perl5Compiler.DEFAULT_MASK);
-        var p2 = JakartaOROUtils.getPattern("\\d+", Perl5Compiler.DEFAULT_MASK);
+        Pattern p1 = JakartaOROUtils.getPattern("\\d+", Perl5Compiler.DEFAULT_MASK);
+        Pattern p2 = JakartaOROUtils.getPattern("\\d+", Perl5Compiler.DEFAULT_MASK);
         assertSame(p1, p2);
     }
 
