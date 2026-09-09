@@ -159,4 +159,42 @@ class IdcardUtils2Test {
     void shouldReturnNullForInvalid10DigitCard() {
         assertNull(IdcardUtils2.validateIdCard10("12345678901"));
     }
+
+    @Test
+    void shouldMapEveryChineseCheckCodeRemainder() {
+        String[] expected = {"1", "0", "x", "9", "8", "7", "6", "5", "4", "3", "2"};
+        for (int remainder = 0; remainder < expected.length; remainder++) {
+            assertEquals(expected[remainder], IdcardUtils2.getCheckCode18(remainder));
+        }
+    }
+
+    @Test
+    void shouldDescribeTaiwanMacaoAndHongKongCards() {
+        String[] femaleTaiwan = IdcardUtils2.validateIdCard10("A223456789");
+        String[] unknownTaiwanGender = IdcardUtils2.validateIdCard10("A323456789");
+        String[] macao = IdcardUtils2.validateIdCard10("1234567(8)");
+        String[] hongKong = IdcardUtils2.validateIdCard10("AB123456(9)");
+        assertNotNull(femaleTaiwan);
+        assertEquals("F", femaleTaiwan[1]);
+        assertNotNull(unknownTaiwanGender);
+        assertEquals("N", unknownTaiwanGender[1]);
+        assertEquals("false", unknownTaiwanGender[2]);
+        assertNotNull(macao);
+        assertEquals("澳门", macao[0]);
+        assertNotNull(hongKong);
+        assertEquals("香港", hongKong[0]);
+        assertNull(IdcardUtils2.validateIdCard10("Z-not-card"));
+    }
+
+    @Test
+    void shouldReadAllDerivedValuesFromFifteenDigitCard() {
+        String card = "110105491231002";
+        assertTrue(IdcardUtils2.getAgeByIdCard(card) > 0);
+        assertEquals("19491231", IdcardUtils2.getBirthByIdCard(card));
+        assertEquals((short) 1949, IdcardUtils2.getYearByIdCard(card));
+        assertEquals((short) 12, IdcardUtils2.getMonthByIdCard(card));
+        assertEquals((short) 31, IdcardUtils2.getDateByIdCard(card));
+        assertTrue("M".equals(IdcardUtils2.getGenderByIdCard(card))
+                || "F".equals(IdcardUtils2.getGenderByIdCard(card)));
+    }
 }
