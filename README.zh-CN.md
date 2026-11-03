@@ -4,7 +4,7 @@
 
 [![Java](https://img.shields.io/badge/Java-17-orange)](https://github.com/easy-4-java/validation-api-extension) [![License](https://img.shields.io/badge/license-Apache%202.0-green)](./LICENSE)
 
-Javax Validation extensions and common constraint validators —— 独立的 Bean Validation（JSR-380，`javax.validation`）扩展库，提供开箱即用的约束注解，以及基于 Apache Tika 的框架无关文件上传校验能力。
+Jakarta Validation extensions and common constraint validators —— 独立的 Bean Validation（`jakarta.validation`）扩展库，提供开箱即用的约束注解，以及基于 Apache Tika 的框架无关文件上传校验能力。
 
 ## 目录
 
@@ -22,7 +22,7 @@ Javax Validation extensions and common constraint validators —— 独立的 Be
 
 ## 1. 项目概述
 
-`validation-api-extension` 是 Bean Validation 2.0（`javax.validation`）的纯 Java 扩展库，提供：
+`validation-api-extension` 的 `main` 分支是 Jakarta Validation 3.1（`jakarta.validation`）的纯 Java 扩展库，提供：
 
 - 常用约束注解（`@IdCard`、`@PhoneNumber`、`@Regexp`、`@Contains`、`@NumberValue`、`@StringDateValue`、`@AllowableValues`）及其校验器，底层由正则属性资源与 libphonenumber 支撑。
 - 文件上传校验（`@FileNotEmpty` / `@FilesNotEmpty`）：检查文件是否存在、扩展名白名单、大小上限，并在严格模式下通过 Apache Tika 校验真实文件内容（不信任客户端声明的 `Content-Type`）。
@@ -31,8 +31,8 @@ Javax Validation extensions and common constraint validators —— 独立的 Be
 **它不是什么**
 
 - 不是校验引擎 —— 它插拔到任意 Bean Validation 实现（测试使用 Hibernate Validator）。
-- 在 1.0.x 版本线上不是 Jakarta Validation（`jakarta.validation`）构建 —— 3.0.x 版本线切换到 Jakarta 命名空间（见第 10 节）。
-- 不绑定 Spring / Javalin / Quarkus —— 核心模块仅依赖 `javax.validation` API。
+- 1.0.x 和 2.0.x 维护分支使用 `javax.validation`；`main` 与 3.0.x 使用 `jakarta.validation`。
+- 不绑定 Spring / Javalin / Quarkus —— `main` 的核心模块使用 `jakarta.validation` API。
 
 **典型场景**
 
@@ -64,10 +64,10 @@ Javax Validation extensions and common constraint validators —— 独立的 Be
 
 | 要求 | 版本 |
 |:---|:---|
-| JDK | 17+（`feature/2.0.x` 分支基线，`maven.compiler.release=8`） |
+| JDK | `main` 为 17+（`maven.compiler.release=17`） |
 | Maven | 3.0+ |
-| Bean Validation API | `javax.validation:validation-api` 2.0.1.Final |
-| 运行时实现 | 任意 JSR-380 实现（测试使用 Hibernate Validator 6.2.4.Final） |
+| Bean Validation API | `main` 使用 `jakarta.validation:jakarta.validation-api` 3.1.1 |
+| 运行时实现 | Jakarta Validation 3.1 实现（测试使用 Hibernate Validator 8.0.3.Final） |
 
 **版本线矩阵**
 
@@ -77,7 +77,7 @@ Javax Validation extensions and common constraint validators —— 独立的 Be
 | `feature/2.0.x` | 17 | Javax Validation 2.0.1 | `2.0.x.*` |
 | `feature/3.0.x` | 21 | Jakarta Validation 3.1.1 | `3.0.x.*` |
 
-除 `javax` / `jakarta` 命名空间适配外，三条版本线保持相同的公共 API、实现逻辑与文档。依赖基线随版本线递进（已从各分支 POM 核实）：
+下表描述维护分支；`main` 使用 Java 17、Jakarta Validation 和 Tika 4.0.0。Tika 4 更改了解析器和检测器 SPI 签名，使用自定义 Tika 集成的应用需要迁移，不能假定与 Tika 2/3 二进制兼容。维护分支的依赖基线如下：
 
 | 关键依赖 | `1.0.x` | `2.0.x` | `3.0.x` |
 |:---|:---|:---|:---|
@@ -92,7 +92,7 @@ Javax Validation extensions and common constraint validators —— 独立的 Be
 ## 4. 架构与模块
 
 ```text
-   Bean Validation（javax.validation，如 Hibernate Validator）
+   Bean Validation（jakarta.validation，如 Hibernate Validator）
                           |
    +----------------------------------------------------+
    | @IdCard  @PhoneNumber  @Regexp  @Contains           |
@@ -136,29 +136,32 @@ Javax Validation extensions and common constraint validators —— 独立的 Be
 <dependency>
     <groupId>io.github.easy4j</groupId>
     <artifactId>validation-api-extension</artifactId>
-    <version>2.0.x.x.20260630-SNAPSHOT</version>
+    <version>2.0.x.20260630-SNAPSHOT</version>
 </dependency>
 ```
 
 **Gradle**
 
 ```gradle
-implementation 'io.github.easy4j:validation-api-extension:2.0.x.x.20260630-SNAPSHOT'
+implementation 'io.github.easy4j:validation-api-extension:2.0.x.20260630-SNAPSHOT'
 ```
 
-对于 `doc/docx/xls/xlsx` 等容器格式，建议应用显式引入标准 Tika 解析包（本库中为 provided 作用域）：
+对于 `doc/docx/xls/xlsx` 等容器格式，使用 `main` 的应用应显式引入匹配的 Tika 4 解析包。本库将其声明为 `provided`：构建和测试本库时可用，但不会作为运行时传递依赖提供给使用方。解析包与 `tika-core` 应保持同一版本：
 
 ```xml
 <dependency>
     <groupId>org.apache.tika</groupId>
     <artifactId>tika-parsers-standard-package</artifactId>
-    <version>2.9.4</version>
+    <version>4.0.0</version>
+    <type>pom</type>
 </dependency>
 ```
 
+Gradle 使用 `implementation 'org.apache.tika:tika-parsers-standard-package:4.0.0@pom'`。Java 8 的 `1.0.x` 分支仍使用 Tika 2.9.4，不适用上述 Tika 4 示例。基于旧版 Tika SPI 的自定义解析器和检测器需要迁移后才能用于 Tika 4。`TikaUtil.detectMimeType(InputStream)` 对可标记流最多检查前 64 KiB 并复位；不可标记流的位置可能前移，此方法不会关闭调用方持有的流。
+
 ## 6. 快速开始
 
-**约束校验**（任意 JSR-380 实现）：
+**约束校验**（Jakarta Validation 实现）：
 
 ```java
 public class UserDto {

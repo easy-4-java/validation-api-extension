@@ -7,6 +7,7 @@ import org.apache.tika.mime.MimeTypeException;
 import org.apache.tika.mime.MimeTypes;
 
 import java.io.File;
+import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Objects;
@@ -23,6 +24,7 @@ import java.util.Objects;
  */
 public final class TikaUtil {
 
+    private static final int DETECTION_PREFIX_BYTES = 64 * 1024;
     private static final MimeTypes DEFAULT_MIME_TYPES = MimeTypes.getDefaultMimeTypes();
     private static final Tika TIKA = new Tika();
 
@@ -46,6 +48,12 @@ public final class TikaUtil {
     /**
      * Detects the MIME type from an input stream.
      *
+     * <p>For streams supporting {@code mark/reset}, detection inspects at most the first
+     * 64 KiB and restores the original position. Formats requiring data beyond that prefix
+     * may be reported as a generic container type. For streams without {@code mark/reset},
+     * Tika may advance the stream; callers needing to reuse it should supply a markable stream.
+     * This method does not close the caller's stream.</p>
+     *
      * @param inputStream the input stream (may be {@code null})
      * @return the detected MIME type, or {@code null} if the stream is {@code null}
      * @throws IOException if detection fails
@@ -54,7 +62,20 @@ public final class TikaUtil {
         if (Objects.isNull(inputStream)) {
             return null;
         }
-        return toMimeType(TIKA.detect(inputStream));
+        if (inputStream.markSupported()) {
+            inputStream.mark(DETECTION_PREFIX_BYTES);
+            try {
+                return toMimeType(TIKA.detect(inputStream.readNBytes(DETECTION_PREFIX_BYTES)));
+            } finally {
+                inputStream.reset();
+            }
+        }
+        return toMimeType(TIKA.detect(new FilterInputStream(inputStream) {
+            @Override
+            public void close() {
+                // The caller owns the supplied stream.
+            }
+        }));
     }
 
     /**

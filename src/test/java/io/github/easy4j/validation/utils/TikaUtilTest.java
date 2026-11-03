@@ -6,6 +6,7 @@ import org.apache.tika.mime.MimeType;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -40,6 +41,60 @@ class TikaUtilTest {
             MimeType mimeType = TikaUtil.detectMimeType(is);
             assertEquals("application/pdf", mimeType.getName());
         }
+    }
+
+    @Test
+    void shouldPreserveMarkableCallerStreamPositionAndOwnership() throws IOException {
+        byte[] pdfContent = "%PDF-1.7\n%%EOF".getBytes(StandardCharsets.US_ASCII);
+        AtomicBoolean closed = new AtomicBoolean();
+        InputStream stream = new ByteArrayInputStream(pdfContent) {
+            @Override
+            public void close() throws IOException {
+                closed.set(true);
+                super.close();
+            }
+        };
+
+        assertEquals("application/pdf", TikaUtil.detectMimeType(stream).getName());
+        assertFalse(closed.get(), "the caller owns the stream");
+        assertArrayEquals(pdfContent, stream.readAllBytes(), "detection must restore the stream position");
+    }
+
+    @Test
+    void shouldRestoreBufferedStreamWithoutReadingUnboundedContent() throws IOException {
+        byte[] content = new byte[128 * 1024];
+        byte[] header = "%PDF-1.7\n%%EOF".getBytes(StandardCharsets.US_ASCII);
+        System.arraycopy(header, 0, content, 0, header.length);
+        try (InputStream stream = new BufferedInputStream(new ByteArrayInputStream(content))) {
+            assertEquals("application/pdf", TikaUtil.detectMimeType(stream).getName());
+            assertArrayEquals(header, stream.readNBytes(header.length));
+        }
+    }
+
+    @Test
+    void shouldNotCloseNonMarkableCallerStream() throws IOException {
+        byte[] content = "%PDF-1.7\n%%EOF".getBytes(StandardCharsets.US_ASCII);
+        ByteArrayInputStream delegate = new ByteArrayInputStream(content);
+        AtomicBoolean closed = new AtomicBoolean();
+        InputStream stream = new InputStream() {
+            @Override
+            public int read() {
+                return delegate.read();
+            }
+
+            @Override
+            public int read(byte[] bytes, int offset, int length) {
+                return delegate.read(bytes, offset, length);
+            }
+
+            @Override
+            public void close() {
+                closed.set(true);
+            }
+        };
+
+        assertEquals("application/pdf", TikaUtil.detectMimeType(stream).getName());
+        assertFalse(closed.get(), "the caller owns the stream even without mark/reset");
     }
 
     @Test
