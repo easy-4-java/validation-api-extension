@@ -58,6 +58,8 @@
         <maven.compiler.release>${java.version}</maven.compiler.release>
         <maven.version>3.0</maven.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!-- Allows Surefire to start when JaCoCo is explicitly skipped. -->
+        <argLine></argLine>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
         <!-- Dependency versions -->
@@ -483,7 +485,7 @@
                     <version>${maven-surefire-plugin.version}</version>
                     <configuration>
                         <useModulePath>false</useModulePath>
-                        <argLine>-Xmx1024m -Dfile.encoding=UTF-8</argLine>
+                        <argLine>@{argLine} -Xmx1024m -Dfile.encoding=UTF-8</argLine>
                     </configuration>
                 </plugin>
 
