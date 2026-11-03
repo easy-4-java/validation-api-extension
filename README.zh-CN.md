@@ -157,7 +157,7 @@ implementation 'io.github.easy4j:validation-api-extension:2.0.x.20260630-SNAPSHO
 </dependency>
 ```
 
-Gradle 使用 `implementation 'org.apache.tika:tika-parsers-standard-package:4.0.0@pom'`。Java 8 的 `1.0.x` 分支仍使用 Tika 2.9.4，不适用上述 Tika 4 示例。基于旧版 Tika SPI 的自定义解析器和检测器需要迁移后才能用于 Tika 4。`TikaUtil.detectMimeType(InputStream)` 对可标记流最多检查前 64 KiB 并复位；不可标记流的位置可能前移，此方法不会关闭调用方持有的流。
+Gradle 使用 `implementation 'org.apache.tika:tika-parsers-standard-package:4.0.0@pom'`。Java 8 的 `1.0.x` 分支仍使用 Tika 2.9.4，不适用上述 Tika 4 示例。基于旧版 Tika SPI 的自定义解析器和检测器需要迁移后才能用于 Tika 4。`TikaUtil.detectMimeType(InputStream)` 会完整检查并复位 `ByteArrayInputStream`。其他可标记流在 1 MiB 以内完整检查并复位；超过上限时抛出 `IOException`，避免将截断的容器误判为普通 ZIP。不可标记流的位置可能前移，此方法不会关闭调用方持有的流。较大输入尽量使用 `File` 或 `UploadFile` 重载。
 
 ## 6. 快速开始
 

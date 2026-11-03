@@ -157,7 +157,7 @@ For container formats (`doc/docx/xls/xlsx`, ...), applications using `main` shou
 </dependency>
 ```
 
-In Gradle, use `implementation 'org.apache.tika:tika-parsers-standard-package:4.0.0@pom'`. The `1.0.x` Java 8 branch remains on Tika 2.9.4; do not use this Tika 4 example there. Custom parsers and detectors built against older Tika SPI must be migrated before use with Tika 4. For `TikaUtil.detectMimeType(InputStream)`, a markable stream is reset after inspecting at most 64 KiB; a non-markable stream may advance, and the method never closes a caller-owned stream.
+In Gradle, use `implementation 'org.apache.tika:tika-parsers-standard-package:4.0.0@pom'`. The `1.0.x` Java 8 branch remains on Tika 2.9.4; do not use this Tika 4 example there. Custom parsers and detectors built against older Tika SPI must be migrated before use with Tika 4. For `TikaUtil.detectMimeType(InputStream)`, a `ByteArrayInputStream` is fully inspected and reset. Other markable streams are fully inspected and reset up to 1 MiB; larger ones fail with `IOException` so a truncated container is not misidentified. A non-markable stream may advance, and the method never closes a caller-owned stream. Use the `File` or `UploadFile` overload for larger inputs when possible.
 
 ## 6. Quick Start
 
