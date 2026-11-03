@@ -7,8 +7,10 @@ import org.apache.tika.mime.MimeTypeException;
 import org.apache.tika.mime.MimeTypes;
 
 import java.io.File;
+import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ByteArrayInputStream;
 import java.util.Objects;
 
 /**
@@ -23,6 +25,7 @@ import java.util.Objects;
  */
 public final class TikaUtil {
 
+    private static final int MAX_BUFFERED_DETECTION_BYTES = 1024 * 1024;
     private static final MimeTypes DEFAULT_MIME_TYPES = MimeTypes.getDefaultMimeTypes();
     private static final Tika TIKA = new Tika();
 
@@ -46,6 +49,13 @@ public final class TikaUtil {
     /**
      * Detects the MIME type from an input stream.
      *
+     * <p>For a {@link ByteArrayInputStream}, detection inspects the full content and restores
+     * the original position without copying it. Other markable streams are buffered up to
+     * 1 MiB for complete detection and then reset; larger inputs fail with an {@link IOException}
+     * instead of being identified from an incomplete prefix. For streams without
+     * {@code mark/reset}, Tika may advance the stream. This method does not close the
+     * caller's stream.</p>
+     *
      * @param inputStream the input stream (may be {@code null})
      * @return the detected MIME type, or {@code null} if the stream is {@code null}
      * @throws IOException if detection fails
@@ -54,7 +64,36 @@ public final class TikaUtil {
         if (Objects.isNull(inputStream)) {
             return null;
         }
-        return toMimeType(TIKA.detect(inputStream));
+        if (inputStream instanceof ByteArrayInputStream) {
+            inputStream.mark(0);
+            try {
+                return toMimeType(TIKA.detect(nonClosing(inputStream)));
+            } finally {
+                inputStream.reset();
+            }
+        }
+        if (inputStream.markSupported()) {
+            inputStream.mark(MAX_BUFFERED_DETECTION_BYTES + 1);
+            try {
+                byte[] content = inputStream.readNBytes(MAX_BUFFERED_DETECTION_BYTES + 1);
+                if (content.length > MAX_BUFFERED_DETECTION_BYTES) {
+                    throw new IOException("Markable stream exceeds 1 MiB detection limit");
+                }
+                return toMimeType(TIKA.detect(new ByteArrayInputStream(content)));
+            } finally {
+                inputStream.reset();
+            }
+        }
+        return toMimeType(TIKA.detect(nonClosing(inputStream)));
+    }
+
+    private static InputStream nonClosing(InputStream inputStream) {
+        return new FilterInputStream(inputStream) {
+            @Override
+            public void close() {
+                // The caller owns the supplied stream.
+            }
+        };
     }
 
     /**

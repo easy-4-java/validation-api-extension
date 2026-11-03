@@ -4,7 +4,7 @@
 
 [![Java](https://img.shields.io/badge/Java-17-orange)](https://github.com/easy-4-java/validation-api-extension) [![License](https://img.shields.io/badge/license-Apache%202.0-green)](./LICENSE)
 
-Javax Validation extensions and common constraint validators — a standalone Bean Validation (JSR-380, `javax.validation`) extension library with ready-to-use constraint annotations and framework-agnostic file upload validation backed by Apache Tika.
+Jakarta Validation extensions and common constraint validators — a standalone Bean Validation (`jakarta.validation`) extension library with ready-to-use constraint annotations and framework-agnostic file upload validation backed by Apache Tika.
 
 ## Table of Contents
 
@@ -22,7 +22,7 @@ Javax Validation extensions and common constraint validators — a standalone Be
 
 ## 1. Project Overview
 
-`validation-api-extension` is a pure-Java extension for Bean Validation 2.0 (`javax.validation`). It provides:
+`validation-api-extension` on `main` is a pure-Java extension for Jakarta Validation 3.1 (`jakarta.validation`). It provides:
 
 - Common constraint annotations (`@IdCard`, `@PhoneNumber`, `@Regexp`, `@Contains`, `@NumberValue`, `@StringDateValue`, `@AllowableValues`) with their validators, backed by regex property resources and libphonenumber.
 - File upload validation (`@FileNotEmpty` / `@FilesNotEmpty`) that checks file presence, extension whitelist, size limit and — in strict mode — the real file content via Apache Tika (do not trust the client-declared `Content-Type`).
@@ -31,8 +31,8 @@ Javax Validation extensions and common constraint validators — a standalone Be
 **What it is not**
 
 - Not a validation engine — it plugs into any Bean Validation provider (Hibernate Validator is used in tests).
-- Not a Jakarta Validation (`jakarta.validation`) build on the 1.0.x line — the 3.0.x line switches to Jakarta namespaces (see Section 10).
-- Not tied to Spring / Javalin / Quarkus — the core module depends only on the `javax.validation` API.
+- The 1.0.x and 2.0.x maintenance branches use `javax.validation`; `main` and 3.0.x use `jakarta.validation`.
+- Not tied to Spring / Javalin / Quarkus — the core module uses the `jakarta.validation` API on `main`.
 
 **Typical scenarios**
 
@@ -64,10 +64,10 @@ Javax Validation extensions and common constraint validators — a standalone Be
 
 | Requirement | Version |
 |:---|:---|
-| JDK | 17+ (baseline of the `feature/2.0.x` branch, `maven.compiler.release=8`) |
+| JDK | 17+ on `main` (`maven.compiler.release=17`) |
 | Maven | 3.0+ |
-| Bean Validation API | `javax.validation:validation-api` 2.0.1.Final |
-| Runtime provider | Any JSR-380 provider (tests use Hibernate Validator 6.2.4.Final) |
+| Bean Validation API | `jakarta.validation:jakarta.validation-api` 3.1.1 on `main` |
+| Runtime provider | A Jakarta Validation 3.1 provider (tests use Hibernate Validator 8.0.3.Final) |
 
 **Version line matrix**
 
@@ -77,7 +77,7 @@ Javax Validation extensions and common constraint validators — a standalone Be
 | `feature/2.0.x` | 17 | Javax Validation 2.0.1 | `2.0.x.*` |
 | `feature/3.0.x` | 21 | Jakarta Validation 3.1.1 | `3.0.x.*` |
 
-Besides the `javax` / `jakarta` namespace adaptation, the three lines keep the same public API, implementation and documentation. Dependency baselines evolve per line (verified from the branch POMs):
+The table below describes the maintenance branches. The `main` branch uses Java 17, Jakarta Validation and Tika 4.0.0. Tika 4 changes parser and detector SPI signatures, so applications with custom Tika integrations must migrate them; do not assume binary compatibility with Tika 2 or 3. Dependency baselines for the maintenance branches are:
 
 | Key dependency | `1.0.x` | `2.0.x` | `3.0.x` |
 |:---|:---|:---|:---|
@@ -92,7 +92,7 @@ The `1.0.x` line pins Apache Tika at **2.9.4**, the newest Tika version loadable
 ## 4. Architecture & Modules
 
 ```text
-   Bean Validation (javax.validation, e.g. Hibernate Validator)
+   Bean Validation (jakarta.validation, e.g. Hibernate Validator)
                           |
    +----------------------------------------------------+
    | @IdCard  @PhoneNumber  @Regexp  @Contains           |
@@ -136,29 +136,32 @@ The `1.0.x` line pins Apache Tika at **2.9.4**, the newest Tika version loadable
 <dependency>
     <groupId>io.github.easy4j</groupId>
     <artifactId>validation-api-extension</artifactId>
-    <version>2.0.x.x.20260630-SNAPSHOT</version>
+    <version>2.0.x.20260630-SNAPSHOT</version>
 </dependency>
 ```
 
 **Gradle**
 
 ```gradle
-implementation 'io.github.easy4j:validation-api-extension:2.0.x.x.20260630-SNAPSHOT'
+implementation 'io.github.easy4j:validation-api-extension:2.0.x.20260630-SNAPSHOT'
 ```
 
-For container formats (`doc/docx/xls/xlsx`, ...), applications are recommended to bring the standard Tika parser package explicitly (provided-scope in this library):
+For container formats (`doc/docx/xls/xlsx`, ...), applications using `main` should add the matching Tika 4 parser package explicitly. This library declares it with `provided` scope, so its parser modules are available while building and testing the library but are not supplied transitively to consumers at runtime. Keep the parser package and `tika-core` on the same Tika version:
 
 ```xml
 <dependency>
     <groupId>org.apache.tika</groupId>
     <artifactId>tika-parsers-standard-package</artifactId>
-    <version>2.9.4</version>
+    <version>4.0.0</version>
+    <type>pom</type>
 </dependency>
 ```
 
+In Gradle, use `implementation 'org.apache.tika:tika-parsers-standard-package:4.0.0@pom'`. The `1.0.x` Java 8 branch remains on Tika 2.9.4; do not use this Tika 4 example there. Custom parsers and detectors built against older Tika SPI must be migrated before use with Tika 4. For `TikaUtil.detectMimeType(InputStream)`, a `ByteArrayInputStream` is fully inspected and reset. Other markable streams are fully inspected and reset up to 1 MiB; larger ones fail with `IOException` so a truncated container is not misidentified. A non-markable stream may advance, and the method never closes a caller-owned stream. Use the `File` or `UploadFile` overload for larger inputs when possible.
+
 ## 6. Quick Start
 
-**Constraint validation** (any JSR-380 provider):
+**Constraint validation** (a Jakarta Validation provider):
 
 ```java
 public class UserDto {
