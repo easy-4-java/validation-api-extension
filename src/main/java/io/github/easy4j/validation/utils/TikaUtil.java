@@ -50,11 +50,10 @@ public final class TikaUtil {
      * Detects the MIME type from an input stream.
      *
      * <p>For a {@link ByteArrayInputStream}, detection inspects the full content and restores
-     * the original position without copying it. Other markable streams are buffered up to
-     * 1 MiB for complete detection and then reset; larger inputs fail with an {@link IOException}
-     * instead of being identified from an incomplete prefix. For streams without
-     * {@code mark/reset}, Tika may advance the stream. This method does not close the
-     * caller's stream.</p>
+     * the original position without copying it. Other markable streams up to 1 MiB are
+     * buffered for complete detection and then reset. Larger streams are passed directly
+     * to Tika for full detection; like non-markable streams, their position may advance.
+     * This method does not close the caller's stream.</p>
      *
      * @param inputStream the input stream (may be {@code null})
      * @return the detected MIME type, or {@code null} if the stream is {@code null}
@@ -74,15 +73,16 @@ public final class TikaUtil {
         }
         if (inputStream.markSupported()) {
             inputStream.mark(MAX_BUFFERED_DETECTION_BYTES + 1);
+            byte[] content;
             try {
-                byte[] content = inputStream.readNBytes(MAX_BUFFERED_DETECTION_BYTES + 1);
-                if (content.length > MAX_BUFFERED_DETECTION_BYTES) {
-                    throw new IOException("Markable stream exceeds 1 MiB detection limit");
-                }
-                return toMimeType(TIKA.detect(new ByteArrayInputStream(content)));
+                content = inputStream.readNBytes(MAX_BUFFERED_DETECTION_BYTES + 1);
             } finally {
                 inputStream.reset();
             }
+            if (content.length <= MAX_BUFFERED_DETECTION_BYTES) {
+                return toMimeType(TIKA.detect(new ByteArrayInputStream(content)));
+            }
+            return toMimeType(TIKA.detect(nonClosing(inputStream)));
         }
         return toMimeType(TIKA.detect(nonClosing(inputStream)));
     }

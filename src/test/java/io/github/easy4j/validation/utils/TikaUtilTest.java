@@ -97,6 +97,23 @@ class TikaUtilTest {
     }
 
     @Test
+    void shouldRecognizeLargeJarFromBufferedStream() throws IOException {
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        try (ZipOutputStream archive = new ZipOutputStream(output)) {
+            byte[] filler = new byte[1024 * 1024 + 64 * 1024];
+            new Random(1234).nextBytes(filler);
+            writeZipEntry(archive, "payload.bin", filler);
+            writeZipEntry(archive, "META-INF/MANIFEST.MF",
+                    "Manifest-Version: 1.0\r\n\r\n".getBytes(StandardCharsets.US_ASCII));
+        }
+        byte[] jar = output.toByteArray();
+        assertTrue(jar.length > 1024 * 1024);
+        try (InputStream stream = new BufferedInputStream(new ByteArrayInputStream(jar))) {
+            assertEquals("application/java-archive", TikaUtil.detectMimeType(stream).getName());
+        }
+    }
+
+    @Test
     void shouldRecognizeOfficeContainersWithMediaBeforeContentTypes() throws IOException {
         byte[] docx = officeArchive("word", "document.xml",
                 "application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml",
@@ -174,14 +191,20 @@ class TikaUtilTest {
     }
 
     @Test
-    void shouldRejectOversizedBufferedStreamWithoutLosingItsPosition() throws IOException {
+    void shouldDetectOversizedBufferedStreamWithoutClosingIt() throws IOException {
         byte[] content = new byte[1024 * 1024 + 1];
         byte[] header = "%PDF-1.7\n%%EOF".getBytes(StandardCharsets.US_ASCII);
         System.arraycopy(header, 0, content, 0, header.length);
-        try (InputStream stream = new BufferedInputStream(new ByteArrayInputStream(content))) {
-            IOException error = assertThrows(IOException.class, () -> TikaUtil.detectMimeType(stream));
-            assertTrue(error.getMessage().contains("1 MiB"));
-            assertArrayEquals(header, stream.readNBytes(header.length));
+        AtomicBoolean closed = new AtomicBoolean();
+        try (InputStream stream = new BufferedInputStream(new ByteArrayInputStream(content)) {
+            @Override
+            public void close() throws IOException {
+                closed.set(true);
+                super.close();
+            }
+        }) {
+            assertEquals("application/pdf", TikaUtil.detectMimeType(stream).getName());
+            assertFalse(closed.get(), "the caller owns the stream");
         }
     }
 
