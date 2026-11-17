@@ -71,9 +71,9 @@
         <jakarta-activation.version>2.1.3</jakarta-activation.version>
         <jakarta-inject.version>2.0.1</jakarta-inject.version>
         <jakarta-validation.version>3.1.1</jakarta-validation.version>
-        <junit-jupiter.version>6.1.0</junit-jupiter.version>
+        <junit-jupiter.version>6.1.3</junit-jupiter.version>
         <junit.version>4.13.2</junit.version>
-        <libphonenumber.version>9.0.35</libphonenumber.version>
+        <libphonenumber.version>9.0.39</libphonenumber.version>
         <lombok.version>1.18.46</lombok.version>
         <oro.version>2.0.8</oro.version>
         <slf4j.version>2.0.18</slf4j.version>
@@ -90,11 +90,11 @@
         <maven-install-plugin.version>3.1.4</maven-install-plugin.version>
         <maven-jar-plugin.version>3.5.0</maven-jar-plugin.version>
         <maven-jacoco-plugin.version>0.8.15</maven-jacoco-plugin.version>
-        <maven-javadoc-plugin.version>3.11.2</maven-javadoc-plugin.version>
+        <maven-javadoc-plugin.version>3.12.0</maven-javadoc-plugin.version>
         <maven-release-plugin.version>3.3.1</maven-release-plugin.version>
         <maven-resources-plugin.version>3.5.0</maven-resources-plugin.version>
         <maven-source-plugin.version>3.4.0</maven-source-plugin.version>
-        <maven-surefire-plugin.version>3.5.2</maven-surefire-plugin.version>
+        <maven-surefire-plugin.version>3.6.0</maven-surefire-plugin.version>
     </properties>
 
     <!-- 依赖版本统一管理（dependencyManagement） -->
