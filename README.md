@@ -4,7 +4,7 @@
 
 [![Java](https://img.shields.io/badge/Java-17-orange)](https://github.com/easy-4-java/validation-api-extension) [![License](https://img.shields.io/badge/license-Apache%202.0-green)](./LICENSE)
 
-Javax Validation extensions and common constraint validators — a standalone Bean Validation (JSR-380, `javax.validation`) extension library with ready-to-use constraint annotations and framework-agnostic file upload validation backed by Apache Tika.
+Jakarta Validation extensions and common constraint validators — a standalone Bean Validation (`jakarta.validation`) extension library with ready-to-use constraint annotations and framework-agnostic file upload validation backed by Apache Tika.
 
 ## Table of Contents
 
@@ -22,7 +22,7 @@ Javax Validation extensions and common constraint validators — a standalone Be
 
 ## 1. Project Overview
 
-`validation-api-extension` is a pure-Java extension for Bean Validation 2.0 (`javax.validation`). It provides:
+`validation-api-extension` is a pure-Java extension for Jakarta Validation 3.1 (`jakarta.validation`). It provides:
 
 - Common constraint annotations (`@IdCard`, `@PhoneNumber`, `@Regexp`, `@Contains`, `@NumberValue`, `@StringDateValue`, `@AllowableValues`) with their validators, backed by regex property resources and libphonenumber.
 - File upload validation (`@FileNotEmpty` / `@FilesNotEmpty`) that checks file presence, extension whitelist, size limit and — in strict mode — the real file content via Apache Tika (do not trust the client-declared `Content-Type`).
@@ -31,8 +31,8 @@ Javax Validation extensions and common constraint validators — a standalone Be
 **What it is not**
 
 - Not a validation engine — it plugs into any Bean Validation provider (Hibernate Validator is used in tests).
-- Not a Jakarta Validation (`jakarta.validation`) build on the 1.0.x line — the 3.0.x line switches to Jakarta namespaces (see Section 10).
-- Not tied to Spring / Javalin / Quarkus — the core module depends only on the `javax.validation` API.
+- Not a Jakarta Validation (`jakarta.validation`) build on the 1.0.x line — the 2.0.x and 3.0.x lines use Jakarta namespaces (see Section 10).
+- Not tied to Spring / Javalin / Quarkus — the core module uses the `jakarta.validation` API.
 
 **Typical scenarios**
 
@@ -58,23 +58,23 @@ Javax Validation extensions and common constraint validators — a standalone Be
 | Real content detection | Stable | `TikaUtil.detectMimeType(...)` detects the actual file header / container, not the client-declared type |
 | SPI content checks | Stable | `FileContentCheckProvider` discovered via `ServiceLoader`, ordered by priority, dispatched by `FileContentCheckStrategy` |
 | Framework-agnostic upload model | Stable | `UploadFile` interface + `UploadFileAdapter` SPI; method semantics match Spring `MultipartFile` |
-| API compatibility gate | Stable | Clirr `api-compatibility` profile + CI job guard the public API surface |
+| API compatibility check | Optional | Clirr `api-compatibility` profile compares against an explicitly selected baseline |
 
 ## 3. Requirements & Compatibility
 
 | Requirement | Version |
 |:---|:---|
-| JDK | 17+ (baseline of the `feature/2.0.x` branch, `maven.compiler.release=8`) |
-| Maven | 3.0+ |
-| Bean Validation API | `javax.validation:validation-api` 2.0.1.Final |
-| Runtime provider | Any JSR-380 provider (tests use Hibernate Validator 6.2.4.Final) |
+| JDK | 17+ (`feature/2.0.x`, `maven.compiler.release=17`) |
+| Maven | Wrapper 3.9.16 (`bash ./mvnw`) |
+| Bean Validation API | `jakarta.validation:jakarta.validation-api` 3.1.1 |
+| Runtime provider | Hibernate Validator 8.0.3.Final (test baseline) |
 
 **Version line matrix**
 
 | Branch | JDK | Bean Validation API | Version pattern |
 |:---|:---|:---|:---|
 | `feature/1.0.x` | 8 | Javax Validation 2.0.1 | `1.0.x.*` |
-| `feature/2.0.x` | 17 | Javax Validation 2.0.1 | `2.0.x.*` |
+| `feature/2.0.x` | 17 | Jakarta Validation 3.1.1 | `2.0.x.*` |
 | `feature/3.0.x` | 21 | Jakarta Validation 3.1.1 | `3.0.x.*` |
 
 Besides the `javax` / `jakarta` namespace adaptation, the three lines keep the same public API, implementation and documentation. Dependency baselines evolve per line (verified from the branch POMs):
@@ -82,17 +82,17 @@ Besides the `javax` / `jakarta` namespace adaptation, the three lines keep the s
 | Key dependency | `1.0.x` | `2.0.x` | `3.0.x` |
 |:---|:---|:---|:---|
 | Apache Tika | 2.9.4 | 3.3.1 | 3.3.2 |
-| libphonenumber | 9.0.34 | 9.0.35 | 9.0.36 |
+| libphonenumber | 9.0.39 | 9.0.39 | 9.0.39 |
 | Apache Commons IO | 2.22.0 | 2.22.0 | 2.22.0 |
-| Hutool Core | 5.8.45 | 5.8.46 | 5.8.47 |
-| Hibernate Validator (test) | 6.2.4.Final | 6.2.5.Final | 9.1.3.Final |
+| Hutool Core | 5.8.46 | 5.8.46 | 5.8.47 |
+| Hibernate Validator (test) | 6.2.4.Final | 8.0.3.Final | 9.1.3.Final |
 
-The `1.0.x` line pins Apache Tika at **2.9.4**, the newest Tika version loadable on JDK 8 (class major version 52). Tika 3.2.2+ fixes known XXE issues but requires JDK 11, so it cannot enter the JDK 8 line.
+The `1.0.x` line retains Tika 2.9.4 for JDK 8. The Tika 4 compatibility profile is available on JDK 17/21 only.
 
 ## 4. Architecture & Modules
 
 ```text
-   Bean Validation (javax.validation, e.g. Hibernate Validator)
+   Bean Validation (jakarta.validation, e.g. Hibernate Validator)
                           |
    +----------------------------------------------------+
    | @IdCard  @PhoneNumber  @Regexp  @Contains           |
@@ -128,7 +128,7 @@ The `1.0.x` line pins Apache Tika at **2.9.4**, the newest Tika version loadable
 
 ## 5. Installation
 
-> **Assumption**: artifacts are currently distributed through the project's private Maven repository (Aliyun) and GitHub Releases; the library is **not yet published to Maven Central**. If the coordinates below cannot be resolved, either add the private repository to your build or install locally with `./mvnw install`.
+> **Assumption**: artifacts are currently distributed through the project's private Maven repository (Aliyun) and GitHub Releases; the library is **not yet published to Maven Central**. If the coordinates below cannot be resolved, either add the private repository to your build or install locally with `bash ./mvnw install`.
 
 **Maven**
 
@@ -136,14 +136,14 @@ The `1.0.x` line pins Apache Tika at **2.9.4**, the newest Tika version loadable
 <dependency>
     <groupId>io.github.easy4j</groupId>
     <artifactId>validation-api-extension</artifactId>
-    <version>2.0.x.x.20260630-SNAPSHOT</version>
+    <version>2.0.x.20260630-SNAPSHOT</version>
 </dependency>
 ```
 
 **Gradle**
 
 ```gradle
-implementation 'io.github.easy4j:validation-api-extension:2.0.x.x.20260630-SNAPSHOT'
+implementation 'io.github.easy4j:validation-api-extension:2.0.x.20260630-SNAPSHOT'
 ```
 
 For container formats (`doc/docx/xls/xlsx`, ...), applications are recommended to bring the standard Tika parser package explicitly (provided-scope in this library):
@@ -152,13 +152,13 @@ For container formats (`doc/docx/xls/xlsx`, ...), applications are recommended t
 <dependency>
     <groupId>org.apache.tika</groupId>
     <artifactId>tika-parsers-standard-package</artifactId>
-    <version>2.9.4</version>
+    <version>3.3.1</version>
 </dependency>
 ```
 
 ## 6. Quick Start
 
-**Constraint validation** (any JSR-380 provider):
+**Constraint validation** (a matching Jakarta Validation provider):
 
 ```java
 public class UserDto {
@@ -237,7 +237,7 @@ Register implementations in `META-INF/services/io.github.easy4j.validation.file.
 
 ```java
 // Detect the REAL content type (header / container), not the client-declared one
-MimeType mime = TikaUtil.detectMimeType(uploadFile);   // UploadFile, File or InputStream
+MimeType mime = TikaUtil.detectContentMimeType(uploadFile);   // content only; ignores the submitted filename
 String mimeType = MimetypeUtil.detectMimeType(file);   // string variant by file or name
 
 // Run registered SPI content providers for a given extension
@@ -250,24 +250,24 @@ if (strategy.hasProvider("pdf")) {
 ## 9. Testing & Build
 
 ```bash
-./mvnw clean verify     # unit tests + JaCoCo coverage report
-./mvnw -Papi-compatibility -Dapi.compatibility.version=<baseline> verify   # Clirr public-API check
+bash ./mvnw clean verify     # unit tests + JaCoCo coverage report
+bash ./mvnw -Papi-compatibility -Dapi.compatibility.version=<baseline> verify   # Clirr public-API check
 ```
 
-- **Tests**: 6 test classes / 13 `@Test` methods covering constraints, the file validation engine and the SPI adapter discovery.
-- **Coverage gate**: JaCoCo checks a 90% line-coverage minimum at the `verify` phase (`haltOnFailure=false`).
-- **CI** (`.github/workflows/build.yml`): JDK 8 matrix running `mvn -B -ntp clean verify`, dependency review on PRs, and an API-compatibility job that diffs the current public API against the target branch with Clirr.
+- **Tests**: constraints, file rules, SPI, data permissions and full-stream detection; see Surefire reports for executed counts.
+- **Coverage gate**: JaCoCo checks a 90% line-coverage minimum at the `verify` phase (`haltOnFailure=true`).
+- **CI** (`.github/workflows/ci.yml`): version branches, main and test/* pushes/PRs use the line-specific JDK and Maven Wrapper. JDK 17/21 verify both baseline and Tika 4. Clirr is an opt-in check with an explicit baseline.
 
 ## 10. Versioning & Branches
 
 | Branch | JDK | Validation API | Version pattern |
 |:---|:---|:---|:---|
 | `feature/1.0.x` | 8 | Javax Validation 2.0.1 | `1.0.x.*` |
-| `feature/2.0.x` | 17 | Javax Validation 2.0.1 | `2.0.x.*` |
+| `feature/2.0.x` | 17 | Jakarta Validation 3.1.1 | `2.0.x.*` |
 | `feature/3.0.x` | 21 | Jakarta Validation 3.1.1 | `3.0.x.*` |
 
 - Snapshot versions follow the `1.0.x.yyyyMMdd-SNAPSHOT` scheme; releases are tagged `v{version}` and published through the project's private repository and GitHub Releases.
-- The `1.0.x` line is the actively maintained JDK 8 / Javax line. The 2.0.x line upgrades the JDK baseline to 17 while keeping the Javax namespace; the 3.0.x line moves to Jakarta Validation 3.x on JDK 21.
+- The `1.0.x` line is the actively maintained JDK 8 / Javax line. The 2.0.x line uses JDK 17 and Jakarta namespaces; the 3.0.x line moves to Jakarta Validation 3.x on JDK 21.
 
 ## 11. Contributing & License
 
@@ -293,3 +293,23 @@ executable plain-validation examples.
 
 The former DDD4J data/auth annotations and provider types are removed: update imports and recompile.
 There is no `nonNullAllowed()` fallback. This object-level constraint does not rewrite SQL.
+
+
+## Programmatic validation and DDD4J integration
+
+`io.github.easy4j.validation.file.FileValidationService` owns the shared rules used by both file constraints and programmatic consumers.
+Its immutable `FileValidationPolicy` and structured `FileValidationResult` expose failure reasons and detected types.
+The annotation adapter selects `constraintCompatibility(true)` to preserve its existing empty-allowlist, filename-MIME,
+zero-byte-limit and legacy Word-container behavior. Programmatic defaults require a file, inspect content, enforce the
+filename extension, and allow up to 2 MiB; a zero size limit is unbounded in that mode.
+
+The service uses the existing content-check SPI and supports an injected detector plus application-specific checks.
+Tika's standard parser package remains `provided`. Office consumers supply a `tika-parser-microsoft-module` matching tika-core.
+All three lines expose the public file API and data permission contracts; consumers must use the matching artifact containing these APIs.
+
+## Stream detection contract and Tika 4 compatibility
+
+- `detectMimeType(InputStream)` leaves caller-owned streams open. Byte-array streams retain their starting position; other markable streams up to 1 MiB are fully inspected and reset.
+- Larger or non-markable streams receive full detection and may advance; the buffering threshold does not reject them or truncate container inspection. Late JAR/Office metadata is inspected.
+- `detectContentMimeType(UploadFile)` ignores the filename and closes the stream it obtains; read failures remain IOExceptions.
+- Baselines: 1.0.x / Tika 2.9.4, 2.0.x / Tika 3.3.1, 3.0.x / Tika 3.3.2. On JDK 17/21, run `bash ./mvnw -Ptika4-compatibility clean verify` to verify Tika 4.0.0 and its POM-packaged standard parsers with the same 90% coverage gate. This profile does not support JDK 8 or change the default publication baseline.
