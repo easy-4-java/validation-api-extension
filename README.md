@@ -280,3 +280,22 @@ This project is licensed under the **Apache License, Version 2.0**. See the [LIC
 `io.github.easy4j.validation.file.FileValidationService` is the shared validation engine for both programmatic callers and `@FileNotEmpty`. Use `DefaultUploadFile`, `FileValidationPolicy`, `FileValidationResult` and `FileValidationFailure` directly. The default `TikaFileTypeDetector` identifies real content; custom detectors implement `FileTypeDetector`, and content rules retain the existing `FileContentCheckStrategy` / ServiceLoader integration. Annotation compatibility rules remain in the shared service's policy, without maintaining a second validation engine.
 
 This maintenance line keeps its existing Java, Validation API and Tika versions. Changes are verified with the full component suite and DDD4J integration tests.
+
+## Data permission validation
+
+Use `io.github.easy4j.validation.constraints.RequiresDataPermissions`,
+`constraintvalidators.RequiresDataPermissionsValidator`, and `provider.DataScopeProvider` directly.
+The application implements `hasPermissions(dataType, data)`; there is no permissive default.
+
+Plain Bean Validation must supply the provider through its `ConstraintValidatorFactory`, using the
+validator's provider constructor and delegating other constraints to the existing factory.
+Spring applications register the provider as a bean and reuse `LocalValidatorFactoryBean` /
+`SpringConstraintValidatorFactory`; standard `@Inject` supplies the provider without a custom factory.
+Missing or ambiguous providers are configuration errors. With a configured provider, null values
+are constraint violations, unauthorized values retain the annotation's groups/message/payload,
+and provider exceptions propagate. Providers must read request identity per call rather than cache
+request-specific authorization decisions in shared fields. See `DataPermissionsValidationTest` for
+executable plain-validation examples.
+
+The former DDD4J data/auth annotations and provider types are removed: update imports and recompile.
+There is no `nonNullAllowed()` fallback. This object-level constraint does not rewrite SQL.
