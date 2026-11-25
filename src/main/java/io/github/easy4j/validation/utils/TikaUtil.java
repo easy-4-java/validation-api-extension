@@ -1,9 +1,11 @@
 package io.github.easy4j.validation.utils;
 
-import org.apache.tika.io.TikaInputStream;
-
 import io.github.easy4j.validation.file.UploadFile;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.input.BoundedInputStream;
+import org.apache.commons.io.input.CloseShieldInputStream;
 import org.apache.tika.Tika;
+import org.apache.tika.io.TikaInputStream;
 import org.apache.tika.mime.MimeType;
 import org.apache.tika.mime.MimeTypeException;
 import org.apache.tika.mime.MimeTypes;
@@ -11,6 +13,7 @@ import org.apache.tika.mime.MimeTypes;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ByteArrayInputStream;
 import java.util.Objects;
 
 /**
@@ -19,12 +22,13 @@ import java.util.Objects;
  * <p>Unlike filename-based detection, Tika inspects the actual file content (magic bytes)
  * to determine the true MIME type, which helps guard against spoofed file extensions.</p>
  *
- * @author [@Loong Wan](https://github.com/loong10k)
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  * @since 3.0.0
  * @see MimetypeUtil
  */
 public final class TikaUtil {
 
+    private static final int MAX_BUFFERED_DETECTION_BYTES = 1024 * 1024;
     private static final MimeTypes DEFAULT_MIME_TYPES = MimeTypes.getDefaultMimeTypes();
     private static final Tika TIKA = new Tika();
 
@@ -48,6 +52,12 @@ public final class TikaUtil {
     /**
      * Detects the MIME type from an input stream.
      *
+     * <p>For a {@link ByteArrayInputStream}, detection inspects the full content and restores
+     * the original position without copying it. Other markable streams up to 1 MiB are
+     * buffered for complete detection and then reset. Larger streams are passed directly
+     * to Tika for full detection; like non-markable streams, their position may advance.
+     * This method does not close the caller's stream.</p>
+     *
      * @param inputStream the input stream (may be {@code null})
      * @return the detected MIME type, or {@code null} if the stream is {@code null}
      * @throws IOException if detection fails
@@ -56,7 +66,37 @@ public final class TikaUtil {
         if (Objects.isNull(inputStream)) {
             return null;
         }
-        return toMimeType(TIKA.detect(inputStream));
+        if (inputStream instanceof ByteArrayInputStream) {
+            inputStream.mark(0);
+            try (TikaInputStream tikaStream = TikaInputStream.get(CloseShieldInputStream.wrap(inputStream))) {
+                return toMimeType(TIKA.detect(tikaStream));
+            } finally {
+                inputStream.reset();
+            }
+        }
+        if (inputStream.markSupported()) {
+            inputStream.mark(MAX_BUFFERED_DETECTION_BYTES + 1);
+            byte[] content;
+            try {
+                // 复用 Commons IO 的有界读取，保留 Java 8 支持，不消费整个大流。
+                content = IOUtils.toByteArray(BoundedInputStream.builder()
+                        .setInputStream(inputStream)
+                        .setMaxCount(MAX_BUFFERED_DETECTION_BYTES + 1)
+                        .setPropagateClose(false)
+                        .get());
+            } finally {
+                inputStream.reset();
+            }
+            if (content.length <= MAX_BUFFERED_DETECTION_BYTES) {
+                try (TikaInputStream tikaStream = TikaInputStream.get(content)) {
+                    return toMimeType(TIKA.detect(tikaStream));
+                }
+            }
+        }
+        // Tika 2 的 OLE 检测也需要容器流；关闭检测临时资源但保留调用方的流。
+        try (TikaInputStream tikaStream = TikaInputStream.get(CloseShieldInputStream.wrap(inputStream))) {
+            return toMimeType(TIKA.detect(tikaStream));
+        }
     }
 
     /**

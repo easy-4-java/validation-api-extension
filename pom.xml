@@ -41,6 +41,8 @@
         <maven.compiler.release>${java.version}</maven.compiler.release>
         <maven.version>3.9.16</maven.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!-- JaCoCo 显式跳过时仍可解析 Surefire 的延迟参数。 -->
+        <argLine></argLine>
         <!-- Dependency versions -->
         <api.compatibility.version>0.0.0</api.compatibility.version>
         <clirr-maven-plugin.version>2.8</clirr-maven-plugin.version>
@@ -48,7 +50,7 @@
         <commons-lang3.version>3.20.0</commons-lang3.version>
         <commons-lang.version>2.6</commons-lang.version>
         <hibernate-validator.version>6.2.4.Final</hibernate-validator.version>
-        <hutool.version>5.8.45</hutool.version>
+        <hutool.version>5.8.46</hutool.version>
         <jakarta-el.version>3.0.4</jakarta-el.version>
         <jakarta-regexp.version>1.4</jakarta-regexp.version>
         <javax-activation.version>1.2.0</javax-activation.version>
@@ -56,7 +58,7 @@
         <javax-validation.version>2.0.1.Final</javax-validation.version>
         <junit-jupiter.version>5.11.4</junit-jupiter.version>
         <junit.version>4.13.2</junit.version>
-        <libphonenumber.version>9.0.34</libphonenumber.version>
+        <libphonenumber.version>9.0.39</libphonenumber.version>
         <lombok.version>1.18.46</lombok.version>
         <oro.version>2.0.8</oro.version>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -72,11 +74,11 @@
         <maven-install-plugin.version>3.1.4</maven-install-plugin.version>
         <maven-jacoco-plugin.version>0.8.15</maven-jacoco-plugin.version>
         <maven-jar-plugin.version>3.5.0</maven-jar-plugin.version>
-        <maven-javadoc-plugin.version>3.11.2</maven-javadoc-plugin.version>
+        <maven-javadoc-plugin.version>3.12.0</maven-javadoc-plugin.version>
         <maven-release-plugin.version>3.3.1</maven-release-plugin.version>
         <maven-resources-plugin.version>3.5.0</maven-resources-plugin.version>
         <maven-source-plugin.version>3.4.0</maven-source-plugin.version>
-        <maven-surefire-plugin.version>3.5.2</maven-surefire-plugin.version>
+        <maven-surefire-plugin.version>3.6.0</maven-surefire-plugin.version>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -241,9 +243,80 @@
                     <name>api.compatibility.version</name>
                 </property>
             </activation>
+            <build>
+                <plugins>
+
+                    <!-- https://mvnrepository.com/artifact/org.codehaus.mojo/clirr-maven-plugin -->
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>clirr-maven-plugin</artifactId>
+                        <version>${clirr-maven-plugin.version}</version>
+                        <executions>
+                            <execution>
+                                <id>check-public-api-compatibility</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>check</goal>
+                                </goals>
+                                <configuration>
+                                    <comparisonVersion>${api.compatibility.version}</comparisonVersion>
+                                    <failOnError>true</failOnError>
+                                    <minSeverity>error</minSeverity>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
         <profile>
             <id>release</id>
+            <build>
+                <plugins>
+
+                    <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-source-plugin -->
+                    <plugin>
+                        <!-- 源码插件：发布时自动将源码同时发布 -->
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                    </plugin>
+
+                    <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-javadoc-plugin -->
+                    <plugin>
+                        <!-- 文档插件：发布时自动生成 Javadoc 并发布 -->
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                    </plugin>
+
+                    <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-gpg-plugin -->
+                    <plugin>
+                        <!-- 签名插件：对制品进行 PGP 签名 -->
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                    </plugin>
+
+                    <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-deploy-plugin -->
+                    <plugin>
+                        <!-- 发布插件：将项目输出构件部署到远程仓库 -->
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-deploy-plugin</artifactId>
+                    </plugin>
+
+                    <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-release-plugin -->
+                    <plugin>
+                        <!-- 发布管理插件：版本发布与标签管理 -->
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-release-plugin</artifactId>
+                    </plugin>
+
+                    <!-- https://mvnrepository.com/artifact/org.sonatype.central/central-publishing-maven-plugin -->
+                    <plugin>
+                        <!-- 发布插件：将制品发布到 Maven Central Portal -->
+                        <groupId>org.sonatype.central</groupId>
+                        <artifactId>central-publishing-maven-plugin</artifactId>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
     </profiles>
     <!-- 制品发布仓库配置（distributionManagement） -->
