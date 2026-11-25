@@ -274,3 +274,27 @@ if (strategy.hasProvider("pdf")) {
 欢迎贡献 —— 请在 GitHub 上提交 Issue 或 Pull Request。
 
 本项目基于 **Apache License, Version 2.0** 许可发布。详见 [LICENSE](./LICENSE) 文件。
+
+## 数据权限校验
+
+权限契约直接使用本组件的 `constraints.RequiresDataPermissions`、`constraintvalidators.RequiresDataPermissionsValidator` 和 `provider.DataScopeProvider`。不依赖 DDD4J、Spring 或 ORM，不提供默认放行策略。
+
+```java
+public class OrderRequest {
+    @RequiresDataPermissions(dataType = "order", message = "订单不可见")
+    private String orderId;
+}
+```
+
+应用实现 `DataScopeProvider.hasPermissions(dataType, data)`。Provider 应从当前请求读取身份；Validator 可能被容器缓存并由多个请求复用，不应把某次请求的身份或授权结果保存在 Provider 的共享字段里。
+
+- 普通 Bean Validation：通过 `ConstraintValidatorFactory` 为 `RequiresDataPermissionsValidator` 调用带 Provider 的构造器；其他类型交还原工厂处理，并遵守其释放约定。完整可运行例子见 `DataPermissionsValidationTest`。
+- Spring：将上游 `DataScopeProvider` 注册为应用 Bean，使用标准 `LocalValidatorFactoryBean` / `SpringConstraintValidatorFactory`。Validator 通过标准 `@Inject` 接收 Provider；无需另一个 Spring 注解、Validator、静态上下文或自定义工厂。Spring Boot/MVC 已提供相应 Validator 时直接复用。
+- 没有配置 Provider 时抛出配置异常，null 值也不掩盖该错误；多个候选 Provider 遵循容器的唯一性或 Primary 选择规则。
+- 已配置 Provider 时，null 产生约束违规；非 null 值委托业务策略。拒绝保持标准 groups/message/payload，策略异常向调用方传播。
+
+这项约束检查对象访问权限，不生成 SQL 条件。应用仍须配置自身的持久化数据范围规则。
+
+原 DDD4J `io.ddd4j.data.datascope` 与 `io.ddd4j.auth.datascope` 的注解、Provider、Validator 已被统一到这里。迁移时更新 import 并重新编译，不保留旧类型兼容壳或 `nonNullAllowed()`。1.0.x 使用 javax Validation/Inject，2.0.x、3.0.x 使用 jakarta。
+
+程序式文件校验同时提供 `file.FileValidationService`、`FileValidationPolicy`、`FileValidationResult` 和 `FileTypeDetector`，与文件注解共享实现；DDD4J 直接使用这些 API。此项补齐其余版本线已有的公共能力，保留本分支依赖版本。

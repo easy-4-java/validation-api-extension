@@ -274,3 +274,22 @@ if (strategy.hasProvider("pdf")) {
 Contributions are welcome — please open an issue or a pull request on GitHub.
 
 This project is licensed under the **Apache License, Version 2.0**. See the [LICENSE](./LICENSE) file for details.
+
+## Data permission validation
+
+Use `io.github.easy4j.validation.constraints.RequiresDataPermissions`,
+`constraintvalidators.RequiresDataPermissionsValidator`, and `provider.DataScopeProvider` directly.
+The application implements `hasPermissions(dataType, data)`; there is no permissive default.
+
+Plain Bean Validation must supply the provider through its `ConstraintValidatorFactory`, using the
+validator's provider constructor and delegating other constraints to the existing factory.
+Spring applications register the provider as a bean and reuse `LocalValidatorFactoryBean` /
+`SpringConstraintValidatorFactory`; standard `@Inject` supplies the provider without a custom factory.
+Missing or ambiguous providers are configuration errors. With a configured provider, null values
+are constraint violations, unauthorized values retain the annotation's groups/message/payload,
+and provider exceptions propagate. Providers must read request identity per call rather than cache
+request-specific authorization decisions in shared fields. See `DataPermissionsValidationTest` for
+executable plain-validation examples.
+
+The former DDD4J data/auth annotations and provider types are removed: update imports and recompile.
+There is no `nonNullAllowed()` fallback. This object-level constraint does not rewrite SQL.
