@@ -4,7 +4,7 @@
 
 [![Java](https://img.shields.io/badge/Java-21-orange)](https://github.com/easy-4-java/validation-api-extension) [![License](https://img.shields.io/badge/license-Apache%202.0-green)](./LICENSE)
 
-Javax Validation extensions and common constraint validators —— 独立的 Bean Validation（JSR-380，`javax.validation`）扩展库，提供开箱即用的约束注解，以及基于 Apache Tika 的框架无关文件上传校验能力。
+Jakarta Validation extensions and common constraint validators —— 独立的 Bean Validation（`jakarta.validation`）扩展库，提供开箱即用的约束注解，以及基于 Apache Tika 的框架无关文件上传校验能力。
 
 ## 目录
 
@@ -22,7 +22,7 @@ Javax Validation extensions and common constraint validators —— 独立的 Be
 
 ## 1. 项目概述
 
-`validation-api-extension` 是 Bean Validation 2.0（`javax.validation`）的纯 Java 扩展库，提供：
+`validation-api-extension` 是 Jakarta Validation 3.1（`jakarta.validation`）的纯 Java 扩展库，提供：
 
 - 常用约束注解（`@IdCard`、`@PhoneNumber`、`@Regexp`、`@Contains`、`@NumberValue`、`@StringDateValue`、`@AllowableValues`）及其校验器，底层由正则属性资源与 libphonenumber 支撑。
 - 文件上传校验（`@FileNotEmpty` / `@FilesNotEmpty`）：检查文件是否存在、扩展名白名单、大小上限，并在严格模式下通过 Apache Tika 校验真实文件内容（不信任客户端声明的 `Content-Type`）。
@@ -31,8 +31,8 @@ Javax Validation extensions and common constraint validators —— 独立的 Be
 **它不是什么**
 
 - 不是校验引擎 —— 它插拔到任意 Bean Validation 实现（测试使用 Hibernate Validator）。
-- 在 1.0.x 版本线上不是 Jakarta Validation（`jakarta.validation`）构建 —— 3.0.x 版本线切换到 Jakarta 命名空间（见第 10 节）。
-- 不绑定 Spring / Javalin / Quarkus —— 核心模块仅依赖 `javax.validation` API。
+- 在 1.0.x 版本线上不是 Jakarta Validation（`jakarta.validation`）构建 —— 2.0.x 和 3.0.x 版本线使用 Jakarta 命名空间（见第 10 节）。
+- 不绑定 Spring / Javalin / Quarkus —— 核心模块使用 `jakarta.validation` API。
 
 **典型场景**
 
@@ -58,23 +58,23 @@ Javax Validation extensions and common constraint validators —— 独立的 Be
 | 真实内容检测 | 稳定 | `TikaUtil.detectMimeType(...)` 检测真实文件头 / 容器类型，而非客户端声明的类型 |
 | SPI 内容检查 | 稳定 | `FileContentCheckProvider` 通过 `ServiceLoader` 发现，按优先级排序，由 `FileContentCheckStrategy` 分发 |
 | 框架无关上传模型 | 稳定 | `UploadFile` 接口 + `UploadFileAdapter` SPI；方法语义与 Spring `MultipartFile` 一致 |
-| API 兼容门禁 | 稳定 | Clirr `api-compatibility` profile + CI 任务守护公开 API 表面 |
+| API 兼容检查 | 可选 | Clirr `api-compatibility` profile 对比显式指定的基线 |
 
 ## 3. 环境要求与兼容性
 
 | 要求 | 版本 |
 |:---|:---|
-| JDK | 21+（`feature/3.0.x` 分支基线，`maven.compiler.release=8`） |
-| Maven | 3.0+ |
-| Bean Validation API | `javax.validation:validation-api` 2.0.1.Final |
-| 运行时实现 | 任意 JSR-380 实现（测试使用 Hibernate Validator 6.2.4.Final） |
+| JDK | 21+ (`feature/3.0.x`, `maven.compiler.release=21`) |
+| Maven | Wrapper 4.0.0-rc-5 (`bash ./mvnw`) |
+| Bean Validation API | `jakarta.validation:jakarta.validation-api` 3.1.1 |
+| 运行时实现 | Hibernate Validator 9.1.3.Final （测试基线） |
 
 **版本线矩阵**
 
 | 分支 | JDK | Bean Validation API | 版本模式 |
 |:---|:---|:---|:---|
 | `feature/1.0.x` | 8 | Javax Validation 2.0.1 | `1.0.x.*` |
-| `feature/2.0.x` | 17 | Javax Validation 2.0.1 | `2.0.x.*` |
+| `feature/2.0.x` | 17 | Jakarta Validation 3.1.1 | `2.0.x.*` |
 | `feature/3.0.x` | 21 | Jakarta Validation 3.1.1 | `3.0.x.*` |
 
 除 `javax` / `jakarta` 命名空间适配外，三条版本线保持相同的公共 API、实现逻辑与文档。依赖基线随版本线递进（已从各分支 POM 核实）：
@@ -82,17 +82,17 @@ Javax Validation extensions and common constraint validators —— 独立的 Be
 | 关键依赖 | `1.0.x` | `2.0.x` | `3.0.x` |
 |:---|:---|:---|:---|
 | Apache Tika | 2.9.4 | 3.3.1 | 3.3.2 |
-| libphonenumber | 9.0.34 | 9.0.35 | 9.0.36 |
+| libphonenumber | 9.0.39 | 9.0.39 | 9.0.39 |
 | Apache Commons IO | 2.22.0 | 2.22.0 | 2.22.0 |
-| Hutool Core | 5.8.45 | 5.8.46 | 5.8.47 |
-| Hibernate Validator（测试） | 6.2.4.Final | 6.2.5.Final | 9.1.3.Final |
+| Hutool Core | 5.8.46 | 5.8.46 | 5.8.47 |
+| Hibernate Validator（测试） | 6.2.4.Final | 8.0.3.Final | 9.1.3.Final |
 
-`1.0.x` 版本线将 Apache Tika 固定为 **2.9.4** —— 这是 JDK 8 可加载的最新 Tika 版本（class major version 52）。Tika 3.2.2+ 虽修复了已知 XXE 漏洞，但其 class major version 为 55、要求 JDK 11，无法进入 JDK 8 版本线。
+`1.0.x` 保留 Tika 2.9.4 与 JDK 8；Tika 4 兼容 profile 仅用于 JDK 17/21。
 
 ## 4. 架构与模块
 
 ```text
-   Bean Validation（javax.validation，如 Hibernate Validator）
+   Bean Validation（jakarta.validation，如 Hibernate Validator）
                           |
    +----------------------------------------------------+
    | @IdCard  @PhoneNumber  @Regexp  @Contains           |
@@ -128,7 +128,7 @@ Javax Validation extensions and common constraint validators —— 独立的 Be
 
 ## 5. 安装
 
-> **假设**：制品目前通过项目私有 Maven 仓库（阿里云）与 GitHub Releases 分发；该库**尚未发布到 Maven Central**。若下列坐标无法解析，请在构建中配置私有仓库，或使用 `./mvnw install` 本地安装。
+> **假设**：制品目前通过项目私有 Maven 仓库（阿里云）与 GitHub Releases 分发；该库**尚未发布到 Maven Central**。若下列坐标无法解析，请在构建中配置私有仓库，或使用 `bash ./mvnw install` 本地安装。
 
 **Maven**
 
@@ -136,14 +136,14 @@ Javax Validation extensions and common constraint validators —— 独立的 Be
 <dependency>
     <groupId>io.github.easy4j</groupId>
     <artifactId>validation-api-extension</artifactId>
-    <version>3.0.x.x.20260630-SNAPSHOT</version>
+    <version>3.0.x.20260630-SNAPSHOT</version>
 </dependency>
 ```
 
 **Gradle**
 
 ```gradle
-implementation 'io.github.easy4j:validation-api-extension:3.0.x.x.20260630-SNAPSHOT'
+implementation 'io.github.easy4j:validation-api-extension:3.0.x.20260630-SNAPSHOT'
 ```
 
 对于 `doc/docx/xls/xlsx` 等容器格式，建议应用显式引入标准 Tika 解析包（本库中为 provided 作用域）：
@@ -152,13 +152,13 @@ implementation 'io.github.easy4j:validation-api-extension:3.0.x.x.20260630-SNAPS
 <dependency>
     <groupId>org.apache.tika</groupId>
     <artifactId>tika-parsers-standard-package</artifactId>
-    <version>2.9.4</version>
+    <version>3.3.2</version>
 </dependency>
 ```
 
 ## 6. 快速开始
 
-**约束校验**（任意 JSR-380 实现）：
+**约束校验**（匹配的 Jakarta Validation 实现）：
 
 ```java
 public class UserDto {
@@ -250,24 +250,24 @@ if (strategy.hasProvider("pdf")) {
 ## 9. 测试与构建
 
 ```bash
-./mvnw clean verify     # 单元测试 + JaCoCo 覆盖率报告
-./mvnw -Papi-compatibility -Dapi.compatibility.version=<基线版本> verify   # Clirr 公共 API 检查
+bash ./mvnw clean verify     # 单元测试 + JaCoCo 覆盖率报告
+bash ./mvnw -Papi-compatibility -Dapi.compatibility.version=<基线版本> verify   # Clirr 公共 API 检查
 ```
 
-- **测试**：6 个测试类 / 13 个 `@Test` 方法，覆盖约束、文件校验引擎与 SPI 适配器发现。
-- **覆盖率门禁**：JaCoCo 在 `verify` 阶段校验行覆盖率不低于 90%（`haltOnFailure=false`）。
-- **CI**（`.github/workflows/build.yml`）：JDK 8 矩阵执行 `mvn -B -ntp clean verify`；PR 上执行依赖审查；另有 API 兼容性任务，用 Clirr 将当前公共 API 与目标分支基线比对。
+- **测试**：覆盖约束、文件规则、SPI、数据权限及完整流检测；执行数量以 Surefire 报告为准。
+- **覆盖率门禁**：JaCoCo 在 `verify` 阶段校验行覆盖率不低于 90%（`haltOnFailure=true`）。
+- **CI**（`.github/workflows/ci.yml`）：版本分支、main 与 test/* 的 push/PR 均验证；使用本分支 JDK 与 Maven Wrapper。JDK 17/21 同时验证基线与 Tika 4；Clirr 是显式指定基线的可选检查。
 
 ## 10. 版本线与分支
 
 | 分支 | JDK | Validation API | 版本模式 |
 |:---|:---|:---|:---|
 | `feature/1.0.x` | 8 | Javax Validation 2.0.1 | `1.0.x.*` |
-| `feature/2.0.x` | 17 | Javax Validation 2.0.1 | `2.0.x.*` |
+| `feature/2.0.x` | 17 | Jakarta Validation 3.1.1 | `2.0.x.*` |
 | `feature/3.0.x` | 21 | Jakarta Validation 3.1.1 | `3.0.x.*` |
 
 - 快照版本遵循 `1.0.x.yyyyMMdd-SNAPSHOT` 命名；发布版本以 `v{version}` 打标签，并通过项目私有仓库与 GitHub Releases 分发。
-- `1.0.x` 是持续维护的 JDK 8 / Javax 版本线；2.0.x 将 JDK 基线提升至 17 且保持 Javax 命名空间；3.0.x 在 JDK 21 上迁移到 Jakarta Validation 3.x。
+- `1.0.x` 是持续维护的 JDK 8 / Javax 版本线；2.0.x 使用 JDK 17 和 Jakarta 命名空间；3.0.x 在 JDK 21 上迁移到 Jakarta Validation 3.x。
 
 ## 11. 贡献与许可
 
@@ -296,3 +296,26 @@ public class OrderRequest {
 这项约束检查对象访问权限，不生成 SQL 条件。应用仍须配置自身的持久化数据范围规则。
 
 原 DDD4J `io.ddd4j.data.datascope` 与 `io.ddd4j.auth.datascope` 的注解、Provider、Validator 已被统一到这里。迁移时更新 import 并重新编译，不保留旧类型兼容壳或 `nonNullAllowed()`。1.0.x 使用 javax Validation/Inject，2.0.x、3.0.x 使用 jakarta。
+
+
+## 程序式校验与 DDD4J 集成
+
+`io.github.easy4j.validation.file.FileValidationService` 是注解和程序式调用共用的文件规则实现。
+`FileValidationPolicy` 提供不可变策略，`FileValidationResult` 返回具体失败原因与已检测类型；
+`FileNotEmptyValidator` 和 `FilesNotEmptyValidator` 通过轻量适配器调用它，不再分别持有通用规则。
+
+程序式策略默认必填、严格检测、上限 2 MiB，零上限表示无限制。严格模式下即使没有白名单也检测内容并核对后缀；
+非严格模式使用声明 MIME。注解入口显式启用 `constraintCompatibility(true)`，保留空白名单跳过类型检测、
+非严格模式按文件名判断 MIME、零字节上限和旧 Word OLE 兼容语义。
+`TikaFileTypeDetector` 只按内容检测，不信任文件名；程序式入口也可注入检测器和附加业务规则。
+默认服务加载既有 `FileContentCheckStrategy` SPI，拒绝和读取异常分别返回 `CONTENT_REJECTED`、`READ_ERROR`。
+
+全量 Tika 标准解析器依然为 `provided`。需要识别 Office 容器时，消费者显式配置与 tika-core 匹配的 `tika-parser-microsoft-module`。
+三条版本线都提供公共文件 API 与数据权限契约，消费者必须使用包含这些 API 的对应版本构件。
+
+## 流检测契约与 Tika 4 兼容
+
+- `detectMimeType(InputStream)` 不关闭调用方的流。字节数组流保留调用前位置；其他可 mark 流在 1 MiB 内完整检测并恢复位置。
+- 大于 1 MiB 或不可 mark 的流执行完整检测，不因该缓冲阈值拒绝；位置可能前移。JAR/Office 元数据位于文件后部也参与检测。
+- `detectContentMimeType(UploadFile)` 忽略文件名，关闭组件自行获取的流；读取异常继续抛出 IOException。
+- 基线：1.0.x / Tika 2.9.4，2.0.x / Tika 3.3.1，3.0.x / Tika 3.3.2。JDK 17/21 可执行 `bash ./mvnw -Ptika4-compatibility clean verify`，验证 Tika 4.0.0 与 POM 类型的标准解析器包，90% 覆盖率门禁保持开启。该 profile 不适用于 JDK 8，也不改变默认发布依赖基线。
