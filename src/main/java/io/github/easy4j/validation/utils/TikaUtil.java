@@ -1,5 +1,7 @@
 package io.github.easy4j.validation.utils;
 
+import org.apache.tika.io.TikaInputStream;
+
 import io.github.easy4j.validation.file.UploadFile;
 import org.apache.tika.Tika;
 import org.apache.tika.mime.MimeType;
@@ -85,7 +87,8 @@ public final class TikaUtil {
         if (Objects.isNull(uploadFile) || uploadFile.isEmpty()) {
             return null;
         }
-        try (InputStream inputStream = uploadFile.getInputStream()) {
+        // Tika 2 的 OLE 容器检测器需要可定位的 TikaInputStream；仍只按内容识别。
+        try (TikaInputStream inputStream = TikaInputStream.get(uploadFile.getInputStream())) {
             return toMimeType(TIKA.detect(inputStream));
         }
     }

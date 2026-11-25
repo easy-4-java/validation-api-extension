@@ -274,3 +274,9 @@ if (strategy.hasProvider("pdf")) {
 Contributions are welcome — please open an issue or a pull request on GitHub.
 
 This project is licensed under the **Apache License, Version 2.0**. See the [LICENSE](./LICENSE) file for details.
+
+## Structured file validation
+
+`io.github.easy4j.validation.file.FileValidationService` is the shared validation engine for both programmatic callers and `@FileNotEmpty`. Use `DefaultUploadFile`, `FileValidationPolicy`, `FileValidationResult` and `FileValidationFailure` directly. The default `TikaFileTypeDetector` identifies real content; custom detectors implement `FileTypeDetector`, and content rules retain the existing `FileContentCheckStrategy` / ServiceLoader integration. Annotation compatibility rules remain in the shared service's policy, without maintaining a second validation engine.
+
+This maintenance line keeps its existing Java, Validation API and Tika versions. Changes are verified with the full component suite and DDD4J integration tests.
